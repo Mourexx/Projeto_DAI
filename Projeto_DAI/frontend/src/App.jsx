@@ -7,13 +7,14 @@ import Layout from './components/ui/Layout'
 
 export default function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/tickets" element={<Tickets />} />
-        <Route path="/transports" element={<Transports />} />
-        <Route path="/map" element={<MapView />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      {/* Páginas com navegação normal */}
+      <Route path="/" element={<Layout><Dashboard /></Layout>} />
+      <Route path="/tickets" element={<Layout><Tickets /></Layout>} />
+      <Route path="/transports" element={<Layout><Transports /></Layout>} />
+
+      {/* Mapa ocupa o ecrã todo, sem Layout */}
+      <Route path="/map" element={<MapView />} />
+    </Routes>
   )
 }
