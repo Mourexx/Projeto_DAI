@@ -1,13 +1,11 @@
-version: "3.9"
-
 services:
   db:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: tub_user
+      POSTGRES_PASSWORD: tub_pass
+      POSTGRES_DB: tub_db
     ports:
       - "5432:5432"
     volumes:

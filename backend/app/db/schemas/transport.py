@@ -2,14 +2,13 @@ from pydantic import BaseModel
 from typing import Optional
 from app.db.models.transport import TransportType
 
-class TransportBase(BaseModel):
+
+class TransportCreate(BaseModel):
     name: str
     type: TransportType
     line: str
     capacity: int
 
-class TransportCreate(TransportBase):
-    pass
 
 class TransportUpdate(BaseModel):
     current_occupancy: Optional[int] = None
@@ -17,8 +16,13 @@ class TransportUpdate(BaseModel):
     longitude: Optional[float] = None
     is_active: Optional[bool] = None
 
-class TransportOut(TransportBase):
+
+class TransportOut(BaseModel):
     id: int
+    name: str
+    type: TransportType
+    line: str
+    capacity: int
     current_occupancy: int
     latitude: Optional[float]
     longitude: Optional[float]
