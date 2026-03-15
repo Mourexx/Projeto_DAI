@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ticketsApi, transportsApi } from '../services/api'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../Context/AuthContext'
 
 const TIPOS = {
   single:  { label: 'Bilhete Simples',  preco: '1,50 €', descricao: 'Válido por 2 horas', icone: '🎫' },

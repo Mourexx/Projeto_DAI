@@ -6,6 +6,7 @@ import OcupacaoChart from '../components/dashboard/OcupacaoChart'
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null)
+  const [alerts, setAlerts] = useState([])
   const [loading, setLoading] = useState(true)
 
   const agora = new Date().toLocaleString('pt-PT', {
@@ -14,11 +15,34 @@ export default function Dashboard() {
   })
 
   useEffect(() => {
-    statsApi.getOverview()
-      .then(r => setStats(r.data))
+    Promise.all([
+      statsApi.getOverview(),
+      statsApi.getOccupancy(),
+    ])
+      .then(([overRes, occRes]) => {
+        setStats(overRes.data)
+        // Gerar alertas dinâmicos com base na ocupação real
+        const alertas = occRes.data
+          .filter(t => t.occupancy_pct >= 75)
+          .map(t => ({
+            linha: t.line,
+            tipo: 'Lotação',
+            descricao: `Ocupação de ${t.occupancy_pct}% no veículo ${t.name}`,
+            estado: t.occupancy_pct >= 90 ? 'critical' : 'warning',
+          }))
+        setAlerts(alertas)
+      })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
+
+  const badgeCls = (estado) =>
+    estado === 'critical'
+      ? 'bg-red-100 text-red-600'
+      : 'bg-yellow-100 text-yellow-600'
+
+  const badgeLabel = (estado) =>
+    estado === 'critical' ? 'Crítico' : 'Atenção'
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -71,38 +95,39 @@ export default function Dashboard() {
         <OcupacaoChart />
       </div>
 
+      {/* Alertas dinâmicos baseados na API */}
       <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
         <h3 className="text-base font-semibold text-gray-700 mb-4">⚠️ Alertas Ativos</h3>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-gray-400 border-b border-gray-100">
-              <th className="pb-2">Linha</th>
-              <th className="pb-2">Tipo</th>
-              <th className="pb-2">Descrição</th>
-              <th className="pb-2">Estado</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            <tr className="hover:bg-gray-50">
-              <td className="py-3 font-medium">L3</td>
-              <td className="py-3">Lotação</td>
-              <td className="py-3 text-gray-500">Ocupação acima de 90%</td>
-              <td className="py-3"><span className="bg-red-100 text-red-600 px-2 py-0.5 rounded-full text-xs font-medium">Crítico</span></td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="py-3 font-medium">L8</td>
-              <td className="py-3">Lotação</td>
-              <td className="py-3 text-gray-500">Ocupação acima de 85%</td>
-              <td className="py-3"><span className="bg-yellow-100 text-yellow-600 px-2 py-0.5 rounded-full text-xs font-medium">Atenção</span></td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="py-3 font-medium">L5</td>
-              <td className="py-3">Atraso</td>
-              <td className="py-3 text-gray-500">Atraso de 8 min na paragem Central</td>
-              <td className="py-3"><span className="bg-yellow-100 text-yellow-600 px-2 py-0.5 rounded-full text-xs font-medium">Atenção</span></td>
-            </tr>
-          </tbody>
-        </table>
+        {alerts.length === 0 ? (
+          <p className="text-sm text-gray-400 text-center py-6">
+            ✅ Nenhum alerta ativo — operação normal
+          </p>
+        ) : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left text-gray-400 border-b border-gray-100">
+                <th className="pb-2">Linha</th>
+                <th className="pb-2">Tipo</th>
+                <th className="pb-2">Descrição</th>
+                <th className="pb-2">Estado</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {alerts.map((a, i) => (
+                <tr key={i} className="hover:bg-gray-50">
+                  <td className="py-3 font-medium">{a.linha}</td>
+                  <td className="py-3">{a.tipo}</td>
+                  <td className="py-3 text-gray-500">{a.descricao}</td>
+                  <td className="py-3">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${badgeCls(a.estado)}`}>
+                      {badgeLabel(a.estado)}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   )

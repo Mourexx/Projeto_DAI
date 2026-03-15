@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../Context/AuthContext'
 
 export default function AuthPage() {
   const [mode, setMode] = useState('login') // 'login' | 'register'
@@ -39,7 +39,7 @@ export default function AuthPage() {
 
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="text-5xl mb-3">&#x1F68C;</div>
+          <div className="text-5xl mb-3">🚌</div>
           <h1 className="text-2xl font-bold text-gray-800">TUB — Transportes Urbanos</h1>
           <p className="text-sm text-gray-400 mt-1">Plataforma de Gestão Urbana</p>
         </div>

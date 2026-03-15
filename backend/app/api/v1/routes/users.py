@@ -1,12 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from typing import List, Optional
+from pydantic import BaseModel
 from app.db.database import get_db
 from app.db.models.user import User
 from app.db.schemas.user import UserCreate, UserOut, Token
-from app.core.security import hash_password, verify_password, create_access_token, get_current_user
+from app.core.security import hash_password, verify_password, create_access_token, get_current_user, get_current_admin
 
 router = APIRouter()
+
+
+class UserUpdate(BaseModel):
+    full_name: Optional[str] = None
+    password: Optional[str] = None
 
 
 @router.post("/register", response_model=UserOut, status_code=201)
@@ -36,3 +43,54 @@ def login(form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
 @router.get("/me", response_model=UserOut)
 def me(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+@router.patch("/me", response_model=UserOut)
+def update_me(
+    update: UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if update.full_name is not None:
+        current_user.full_name = update.full_name
+    if update.password is not None:
+        current_user.hashed_password = hash_password(update.password)
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+
+# ── Rotas de administrador ──────────────────────────────────────────
+
+@router.get("/", response_model=List[UserOut])
+def list_users(db: Session = Depends(get_db), _=Depends(get_current_admin)):
+    return db.query(User).all()
+
+
+@router.patch("/{user_id}/permissions", response_model=UserOut)
+def update_permissions(
+    user_id: int,
+    is_admin: bool,
+    db: Session = Depends(get_db),
+    _=Depends(get_current_admin),
+):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilizador não encontrado")
+    user.is_admin = is_admin
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+@router.delete("/{user_id}", status_code=204)
+def deactivate_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    _=Depends(get_current_admin),
+):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilizador não encontrado")
+    user.is_active = False
+    db.commit()

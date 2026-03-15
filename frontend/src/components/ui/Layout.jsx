@@ -1,18 +1,19 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Ticket, Bus, Map, LogOut, User } from 'lucide-react'
-import { useAuth } from '../../context/AuthContext'
-
-const navItems = [
-  { path: '/',           label: 'Dashboard',   icon: LayoutDashboard },
-  { path: '/tickets',    label: 'Bilhetes',    icon: Ticket },
-  { path: '/transports', label: 'Transportes', icon: Bus },
-  { path: '/map',        label: 'Mapa',        icon: Map },
-]
+import { LayoutDashboard, Ticket, Bus, Map, LogOut, User, Users } from 'lucide-react'
+import { useAuth } from '../../Context/AuthContext'
 
 export default function Layout({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
   const { user, logout } = useAuth()
+
+  const navItems = [
+    { path: '/',           label: 'Dashboard',   icon: LayoutDashboard },
+    { path: '/tickets',    label: 'Bilhetes',    icon: Ticket },
+    { path: '/transports', label: 'Transportes', icon: Bus },
+    { path: '/map',        label: 'Mapa',        icon: Map },
+    ...(user?.is_admin ? [{ path: '/admin/users', label: 'Utilizadores', icon: Users }] : []),
+  ]
 
   const handleLogout = () => {
     logout()
@@ -44,9 +45,8 @@ export default function Layout({ children }) {
           ))}
         </nav>
 
-        {/* User info + logout */}
         <div className="p-4 border-t">
-          <div className="flex items-center gap-3 px-2 py-2 mb-2">
+          <Link to="/profile" className="flex items-center gap-3 px-2 py-2 mb-2 rounded-lg hover:bg-gray-50 transition-colors">
             <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
               <User size={14} className="text-blue-600" />
             </div>
@@ -54,7 +54,7 @@ export default function Layout({ children }) {
               <p className="text-xs font-semibold text-gray-700 truncate">{user?.full_name || 'Utilizador'}</p>
               <p className="text-xs text-gray-400 truncate">{user?.is_admin ? 'Administrador' : 'Utilizador'}</p>
             </div>
-          </div>
+          </Link>
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 w-full px-4 py-2 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors text-sm"
