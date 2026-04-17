@@ -12,13 +12,15 @@ from app.db.models.ticket import Ticket, TicketStatus
 from app.db.models.transport import Transport
 from app.db.models.viagem import Viagem
 from app.db.models.contagem import ContagemPassageiros, TipoEvento
+from app.db.models.user import User
+from app.core.security import get_current_user
 
 router = APIRouter()
 
 
 # UC5.1 – KPIs gerais
 @router.get("/overview")
-def get_overview(db: Session = Depends(get_db)):
+def get_overview(db: Session = Depends(get_db), _: User = Depends(get_current_user)):
     total_tickets = db.query(func.count(Ticket.id)).scalar() or 0
     active_tickets = db.query(func.count(Ticket.id)).filter(Ticket.status == TicketStatus.active).scalar() or 0
     total_revenue = db.query(func.sum(Ticket.price)).scalar() or 0.0
@@ -36,14 +38,14 @@ def get_overview(db: Session = Depends(get_db)):
 
 # UC5.4 – Análise de bilhetes por tipo
 @router.get("/tickets-by-type")
-def tickets_by_type(db: Session = Depends(get_db)):
+def tickets_by_type(db: Session = Depends(get_db), _: User = Depends(get_current_user)):
     results = db.query(Ticket.type, func.count(Ticket.id)).group_by(Ticket.type).all()
     return [{"type": r[0], "count": r[1]} for r in results]
 
 
 # UC5.3 – Ocupação dos veículos
 @router.get("/occupancy")
-def transport_occupancy(db: Session = Depends(get_db)):
+def transport_occupancy(db: Session = Depends(get_db), _: User = Depends(get_current_user)):
     transports = db.query(Transport).filter(Transport.is_active == True).all()
     return [
         {
@@ -61,7 +63,7 @@ def transport_occupancy(db: Session = Depends(get_db)):
 
 # UC5.5 – Histórico e análise de viagens
 @router.get("/viagens")
-def viagens_stats(db: Session = Depends(get_db)):
+def viagens_stats(db: Session = Depends(get_db), _: User = Depends(get_current_user)):
     total = db.query(func.count(Viagem.id)).scalar() or 0
     em_curso = db.query(func.count(Viagem.id)).filter(Viagem.em_curso == True).scalar() or 0
     total_entradas = db.query(func.sum(ContagemPassageiros.quantidade)).filter(
@@ -82,7 +84,7 @@ def viagens_stats(db: Session = Depends(get_db)):
 
 # UC6 – Alertas: endpoint de sobrelotação
 @router.get("/alerts")
-def get_alerts(db: Session = Depends(get_db)):
+def get_alerts(db: Session = Depends(get_db), _: User = Depends(get_current_user)):
     """UC6.1 – Detetar Sobrelotação | UC6.2 – Anomalias | UC6.3 – Falhas de leitura"""
     transports = db.query(Transport).filter(Transport.is_active == True).all()
     alerts = []

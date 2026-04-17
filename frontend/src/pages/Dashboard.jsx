@@ -57,6 +57,7 @@ export default function Dashboard() {
   const [alerts, setAlerts] = useState([])
   const [occupancy, setOccupancy] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
 
   const agora = new Date().toLocaleString('pt-PT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })
 
@@ -71,10 +72,18 @@ export default function Dashboard() {
           estado: t.occupancy_pct >= 90 ? 'critical' : 'warning',
         })))
       })
-      .catch(() => {}).finally(() => setLoading(false))
+      .catch(() => setError(true)).finally(() => setLoading(false))
   }, [])
 
   const top5 = [...occupancy].sort((a, b) => b.occupancy_pct - a.occupancy_pct).slice(0, 5)
+
+  if (error) return (
+    <div style={{ padding: 28, fontFamily: "'DM Sans', sans-serif" }}>
+      <div style={{ color: '#DC2626', textAlign: 'center', padding: 60, background: '#FEF2F2', borderRadius: 12, border: '1px solid #FECACA' }}>
+        Erro ao carregar o dashboard. Tenta novamente mais tarde.
+      </div>
+    </div>
+  )
 
   return (
     <div style={{ padding: 28, fontFamily: "'DM Sans', sans-serif", minHeight: '100vh', background: '#F4F6F9', overflowY: 'auto' }} className="animate-fadeIn">

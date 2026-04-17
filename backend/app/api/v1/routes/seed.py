@@ -2,7 +2,7 @@
 Rota de seed — cria dados de demonstração.
 Coordenadas reais da TUB extraídas dos dados GTFS (dados_tun.zip).
 """
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
 from app.db.database import get_db
@@ -17,7 +17,10 @@ router = APIRouter()
 
 @router.post("/", status_code=201)
 def seed(db: Session = Depends(get_db)):
-    """Cria dados de demonstração se ainda não existirem."""
+    """Cria dados de demonstração — só funciona uma vez (primeira execução)."""
+    if db.query(User).count() > 0:
+        raise HTTPException(status_code=403, detail="Seed já foi executado. Use as credenciais existentes.")
+
     created = []
 
     # Admin

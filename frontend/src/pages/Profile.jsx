@@ -111,9 +111,9 @@ export default function Profile() {
             {msg && (
               <div style={{
                 padding: '10px 14px', borderRadius: 8, fontSize: 13,
-                background: msg.type === 'success' ? '#F0FDF4' : '#EBF4FF',
+                background: msg.type === 'success' ? '#F0FDF4' : '#FEF2F2',
                 border: `1px solid ${msg.type === 'success' ? '#BBF7D0' : '#FECACA'}`,
-                color: msg.type === 'success' ? '#10B981' : '#005BAC',
+                color: msg.type === 'success' ? '#10B981' : '#DC2626',
                 fontWeight: 600,
               }}>
                 {msg.type === 'success' ? '' : ''}{msg.text}

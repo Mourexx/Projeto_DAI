@@ -79,9 +79,9 @@ export default function AdminUsers() {
       {msg && (
         <div style={{
           marginBottom: 16, padding: '10px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600,
-          background: msg.type === 'success' ? '#F0FDF4' : '#EBF4FF',
+          background: msg.type === 'success' ? '#F0FDF4' : '#FEF2F2',
           border: `1px solid ${msg.type === 'success' ? '#BBF7D0' : '#FECACA'}`,
-          color: msg.type === 'success' ? '#10B981' : '#005BAC',
+          color: msg.type === 'success' ? '#10B981' : '#DC2626',
         }}>
           {msg.type === 'success' ? '' : ''}{msg.text}
         </div>

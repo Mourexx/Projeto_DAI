@@ -27,7 +27,6 @@ export const ticketsApi = {
   getMyTickets: ()         => api.get('/tickets/me'),
   validate:     (ticketId) => api.post(`/tickets/${ticketId}/validate`),
   getAll:       ()         => api.get('/tickets/all'),           // UC2.4 admin
-  getStats:     ()         => api.get('/tickets/stats/summary'), // UC5.4
 }
 
 // UC4 – Transportes
