@@ -41,3 +41,9 @@ body {
 }
 .animate-fadeIn { animation: fadeIn 0.25s ease; }
 .pulse-dot { animation: pulseDot 2s ease infinite; }
+
+.hover-row { transition: background 0.1s; }
+.hover-row:hover { background: #FAFAFA !important; }
+
+.hover-card { transition: box-shadow 0.2s, transform 0.2s; }
+.hover-card:hover { box-shadow: 0 8px 24px rgba(0,91,172,0.12) !important; transform: translateY(-2px) !important; }

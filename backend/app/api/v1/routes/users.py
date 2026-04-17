@@ -22,11 +22,6 @@ ADMIN_EMAILS = {"admin@tub.pt", "admin@tub.com"}
 def register(user: UserCreate, db: Session = Depends(get_db)):
     existing = db.query(User).filter(User.email == user.email).first()
     if existing:
-        # Se já existe mas não é admin e devia ser, corrige
-        if user.email in ADMIN_EMAILS and not existing.is_admin:
-            existing.is_admin = True
-            db.commit()
-            db.refresh(existing)
         raise HTTPException(status_code=400, detail="Email já registado")
     db_user = User(
         email=user.email,
@@ -85,7 +80,7 @@ def update_me(
 
 @router.get("/", response_model=List[UserOut])
 def list_users(db: Session = Depends(get_db), _=Depends(get_current_admin)):
-    return db.query(User).all()
+    return db.query(User).filter(User.is_active == True).all()
 
 
 @router.patch("/{user_id}/permissions", response_model=UserOut)

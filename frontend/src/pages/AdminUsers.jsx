@@ -114,10 +114,7 @@ export default function AdminUsers() {
             </thead>
             <tbody>
               {filtered.map((u, i) => (
-                <tr key={u.id} style={{ borderBottom: '1px solid #F9FAFB' }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#FAFAFA'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'white'}
-                >
+                <tr key={u.id} className="hover-row" style={{ borderBottom: '1px solid #F9FAFB' }}>
                   <td style={{ padding: '13px 22px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <div style={{

@@ -39,8 +39,8 @@ export default function Transports() {
   }
 
   let filtrados = transports.filter(t =>
-    t.name.toLowerCase().includes(search.toLowerCase()) ||
-    t.line.toLowerCase().includes(search.toLowerCase())
+    (t.name ?? '').toLowerCase().includes(search.toLowerCase()) ||
+    (t.line ?? '').toLowerCase().includes(search.toLowerCase())
   )
 
   if (sortBy === 'occupancy') filtrados = [...filtrados].sort((a, b) => {
@@ -140,7 +140,7 @@ export default function Transports() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
               {filtrados.map(t => {
                 const pct = t.capacity > 0 ? Math.round((t.current_occupancy / t.capacity) * 100) : 0
-                const color = pct >= 85 ? '#005BAC' : pct >= 65 ? '#F59E0B' : '#10B981'
+                const color = pct >= 85 ? '#EF4444' : pct >= 65 ? '#F59E0B' : '#10B981'
                 return (
                   <div key={t.id} style={{ background: 'white', borderRadius: 12, border: '1px solid #E2E8F0', padding: '18px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>

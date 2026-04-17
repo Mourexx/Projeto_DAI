@@ -34,6 +34,7 @@ export default function Analytics() {
   const [occupancy, setOccupancy] = useState([])
   const [viagens, setViagens] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const [activeTab, setActiveTab] = useState('overview')
 
   useEffect(() => {
@@ -56,7 +57,7 @@ export default function Analytics() {
         cap: t.capacity,
       })))
       setViagens(vg.data)
-    }).catch(() => {}).finally(() => setLoading(false))
+    }).catch(() => setError(true)).finally(() => setLoading(false))
   }, [])
 
   const tabs = [
@@ -70,6 +71,16 @@ export default function Analytics() {
     return (
       <div style={{ padding: 28, fontFamily: "'DM Sans', sans-serif" }}>
         <div style={{ color: '#9CA3AF', textAlign: 'center', padding: 60 }}>A carregar dados analíticos...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: 28, fontFamily: "'DM Sans', sans-serif" }}>
+        <div style={{ color: '#DC2626', textAlign: 'center', padding: 60, background: '#FEF2F2', borderRadius: 12, border: '1px solid #FECACA' }}>
+          Erro ao carregar dados analíticos. Tenta novamente mais tarde.
+        </div>
       </div>
     )
   }

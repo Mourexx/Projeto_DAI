@@ -198,10 +198,7 @@ export default function Tickets() {
                         const tipo = TIPOS[t.type] || {}
                         const s = STATUS[t.status] || {}
                         return (
-                          <tr key={t.id} style={{ borderBottom: '1px solid #F8FAFC' }}
-                            onMouseEnter={e => e.currentTarget.style.background = '#FAFAFA'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'white'}
-                          >
+                          <tr key={t.id} className="hover-row" style={{ borderBottom: '1px solid #F8FAFC' }}>
                             <td style={{ padding: '12px 20px', fontWeight: 600 }}>{tipo.label}</td>
                             <td style={{ padding: '12px 20px' }}>{t.price.toFixed(2)} €</td>
                             <td style={{ padding: '12px 20px', color: '#94A3B8' }}>{fmt(t.purchased_at)}</td>

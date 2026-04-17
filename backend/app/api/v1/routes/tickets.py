@@ -115,9 +115,6 @@ def validate_ticket(
     if ticket.status == TicketStatus.used:
         raise HTTPException(status_code=400, detail="Bilhete já foi utilizado")
 
-    if ticket.status == TicketStatus.expired:
-        raise HTTPException(status_code=400, detail="Bilhete expirado")
-
     if ticket.status != TicketStatus.active:
         raise HTTPException(status_code=400, detail="Bilhete inválido")
 

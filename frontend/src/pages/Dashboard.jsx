@@ -9,15 +9,11 @@ const R = '#E3001B'
 
 function KPI({ title, value, sub, Icon, accent, trend }) {
   return (
-    <div style={{
+    <div className="hover-card" style={{
       background: 'white', borderRadius: 14, border: '1px solid #E2E8F0',
       padding: '22px', overflow: 'hidden', position: 'relative',
       boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
-      transition: 'box-shadow 0.2s, transform 0.2s',
-    }}
-      onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,91,172,0.12)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-      onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.05)'; e.currentTarget.style.transform = 'none' }}
-    >
+    }}>
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: accent }} />
       <div style={{ position: 'absolute', bottom: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: accent + '08' }} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
