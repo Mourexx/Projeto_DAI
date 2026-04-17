@@ -11,14 +11,26 @@ from app.core.security import get_current_user, get_current_admin
 router = APIRouter()
 
 PRICES = {
+    # Legados
     TicketType.single: 1.50,
     TicketType.daily: 5.00,
     TicketType.monthly: 40.00,
+    # Tarifas reais TUB
+    TicketType.single_1coroa: 1.55,
+    TicketType.single_2coroa: 2.00,
+    TicketType.transfer_1coroa: 1.55,
+    TicketType.transfer_2coroa: 2.00,
 }
 VALIDITY = {
+    # Legados
     TicketType.single: timedelta(hours=2),
     TicketType.daily: timedelta(days=1),
     TicketType.monthly: timedelta(days=30),
+    # Tarifas reais TUB
+    TicketType.single_1coroa: timedelta(minutes=60),
+    TicketType.single_2coroa: timedelta(minutes=90),
+    TicketType.transfer_1coroa: timedelta(minutes=60),
+    TicketType.transfer_2coroa: timedelta(minutes=90),
 }
 
 

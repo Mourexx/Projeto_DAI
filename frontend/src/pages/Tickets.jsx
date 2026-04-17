@@ -6,9 +6,14 @@ import { CheckCircle, Clock, XCircle, Plus, TicketIcon } from 'lucide-react'
 
 const B = '#005BAC'
 const TIPOS = {
-  single:  { label: 'Bilhete Simples', preco: 1.50, precoFmt: '1,50 €', descricao: 'Valido por 2 horas' },
-  daily:   { label: 'Bilhete Diario',  preco: 5.00, precoFmt: '5,00 €', descricao: 'Valido por 24 horas' },
-  monthly: { label: 'Passe Mensal',    preco: 40.00, precoFmt: '40,00 €', descricao: 'Valido por 30 dias' },
+  single_1coroa:   { label: 'Bilhete 1 Coroa',       precoFmt: '1,55 €', descricao: '1 zona — válido 60 minutos' },
+  single_2coroa:   { label: 'Bilhete 2 Coroas',      precoFmt: '2,00 €', descricao: '2 zonas — válido 90 minutos' },
+  transfer_1coroa: { label: 'Transbordo 1 Coroa',    precoFmt: '1,55 €', descricao: '1 zona + transbordo — válido 60 minutos' },
+  transfer_2coroa: { label: 'Transbordo 2 Coroas',   precoFmt: '2,00 €', descricao: '2 zonas + transbordo — válido 90 minutos' },
+  // Legados — apenas para exibição de bilhetes antigos
+  single:   { label: 'Bilhete Simples', precoFmt: '', descricao: 'Válido por 2 horas' },
+  daily:    { label: 'Bilhete Diário',  precoFmt: '', descricao: 'Válido por 24 horas' },
+  monthly:  { label: 'Passe Mensal',    precoFmt: '', descricao: 'Válido por 30 dias' },
 }
 const STATUS = {
   active:  { label: 'Ativo',     bg: '#F0FDF4', color: '#16A34A' },
@@ -73,7 +78,7 @@ export default function Tickets() {
   const [loading, setLoading] = useState(true)
   const [buying, setBuying] = useState(false)
   const [validating, setValidating] = useState(null)
-  const [form, setForm] = useState({ type: 'single', transport_id: '' })
+  const [form, setForm] = useState({ type: 'single_1coroa', transport_id: '' })
   const [msg, setMsg] = useState(null)
   const [tab, setTab] = useState('bilhetes')
 
@@ -227,7 +232,7 @@ export default function Tickets() {
               <div>
                 <label style={lbl}>Tipo de bilhete</label>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {Object.entries(TIPOS).map(([key, info]) => (
+                  {Object.entries(TIPOS).filter(([key]) => !['single','daily','monthly'].includes(key)).map(([key, info]) => (
                     <label key={key} style={{
                       display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px',
                       borderRadius: 10, border: `2px solid ${form.type === key ? B : '#E2E8F0'}`,

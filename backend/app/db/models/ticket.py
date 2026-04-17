@@ -6,9 +6,15 @@ from app.db.database import Base
 
 
 class TicketType(str, enum.Enum):
-    single = "single"      # Bilhete simples (2h)
-    daily = "daily"        # Bilhete diário (24h)
-    monthly = "monthly"    # Passe mensal (30 dias)
+    # Tipos legados — mantidos para compatibilidade com registos existentes
+    single = "single"
+    daily = "daily"
+    monthly = "monthly"
+    # Tarifas reais TUB (GTFS fare_attributes.txt)
+    single_1coroa = "single_1coroa"       # 1 zona, 60 min
+    single_2coroa = "single_2coroa"       # 2 zonas, 90 min
+    transfer_1coroa = "transfer_1coroa"   # 1 zona + transbordo, 60 min
+    transfer_2coroa = "transfer_2coroa"   # 2 zonas + transbordo, 90 min
 
 
 class TicketStatus(str, enum.Enum):

@@ -1,10 +1,21 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 from app.api.v1.routes import tickets, transports, stats, users, seed
 from app.db.database import engine, Base, get_db
 import app.db.models  # noqa: F401
 
 Base.metadata.create_all(bind=engine)
+
+# Adiciona novos valores ao enum tickettype no PostgreSQL (idempotente)
+_NEW_TICKET_TYPES = ['single_1coroa', 'single_2coroa', 'transfer_1coroa', 'transfer_2coroa']
+with engine.connect() as _conn:
+    for _val in _NEW_TICKET_TYPES:
+        try:
+            _conn.execute(text(f"ALTER TYPE tickettype ADD VALUE IF NOT EXISTS '{_val}'"))
+            _conn.commit()
+        except Exception:
+            _conn.rollback()
 
 app = FastAPI(
     title="Sistema de Bilhética - API",

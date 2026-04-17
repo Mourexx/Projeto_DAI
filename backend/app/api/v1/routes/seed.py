@@ -94,15 +94,15 @@ def seed(db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == "user@tub.pt").first()
     if user and db.query(Ticket).filter(Ticket.user_id == user.id).count() == 0:
         bilhetes = [
-            Ticket(user_id=user.id, type=TicketType.single, price=1.50,
-                   status=TicketStatus.active, valid_until=now + timedelta(hours=2),
-                   purchased_at=now - timedelta(minutes=30)),
-            Ticket(user_id=user.id, type=TicketType.daily, price=5.00,
-                   status=TicketStatus.used, valid_until=now - timedelta(hours=2),
-                   purchased_at=now - timedelta(days=1), used_at=now - timedelta(hours=3)),
-            Ticket(user_id=user.id, type=TicketType.monthly, price=40.00,
-                   status=TicketStatus.active, valid_until=now + timedelta(days=25),
-                   purchased_at=now - timedelta(days=5)),
+            Ticket(user_id=user.id, type=TicketType.single_1coroa, price=1.55,
+                   status=TicketStatus.active, valid_until=now + timedelta(minutes=60),
+                   purchased_at=now - timedelta(minutes=10)),
+            Ticket(user_id=user.id, type=TicketType.single_2coroa, price=2.00,
+                   status=TicketStatus.used, valid_until=now - timedelta(minutes=30),
+                   purchased_at=now - timedelta(hours=2), used_at=now - timedelta(hours=1)),
+            Ticket(user_id=user.id, type=TicketType.transfer_1coroa, price=1.55,
+                   status=TicketStatus.expired, valid_until=now - timedelta(hours=1),
+                   purchased_at=now - timedelta(hours=3)),
         ]
         for b in bilhetes:
             db.add(b)
@@ -112,18 +112,15 @@ def seed(db: Session = Depends(get_db)):
     admin = db.query(User).filter(User.email == "admin@tub.pt").first()
     if admin and db.query(Ticket).filter(Ticket.user_id == admin.id).count() == 0:
         bilhetes_admin = [
-            Ticket(user_id=admin.id, type=TicketType.single, price=1.50,
-                   status=TicketStatus.active, valid_until=now + timedelta(hours=2),
+            Ticket(user_id=admin.id, type=TicketType.single_1coroa, price=1.55,
+                   status=TicketStatus.active, valid_until=now + timedelta(minutes=55),
+                   purchased_at=now - timedelta(minutes=5)),
+            Ticket(user_id=admin.id, type=TicketType.transfer_2coroa, price=2.00,
+                   status=TicketStatus.active, valid_until=now + timedelta(minutes=80),
                    purchased_at=now - timedelta(minutes=10)),
-            Ticket(user_id=admin.id, type=TicketType.daily, price=5.00,
-                   status=TicketStatus.active, valid_until=now + timedelta(hours=20),
-                   purchased_at=now - timedelta(hours=4)),
-            Ticket(user_id=admin.id, type=TicketType.monthly, price=40.00,
-                   status=TicketStatus.active, valid_until=now + timedelta(days=28),
-                   purchased_at=now - timedelta(days=2)),
-            Ticket(user_id=admin.id, type=TicketType.single, price=1.50,
-                   status=TicketStatus.used, valid_until=now - timedelta(hours=1),
-                   purchased_at=now - timedelta(hours=3), used_at=now - timedelta(hours=2)),
+            Ticket(user_id=admin.id, type=TicketType.single_2coroa, price=2.00,
+                   status=TicketStatus.used, valid_until=now - timedelta(minutes=15),
+                   purchased_at=now - timedelta(hours=2), used_at=now - timedelta(hours=1)),
         ]
         for b in bilhetes_admin:
             db.add(b)
