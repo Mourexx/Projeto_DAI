@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { fetchBuses, fetchLines } from '../services/busService'
 
-const POLL_INTERVAL = 5000 // atualiza a cada 5 segundos
+const POLL_INTERVAL = 1000 // atualiza a cada 1 segundo
 
 export function useBuses() {
   const [buses, setBuses]           = useState([])
