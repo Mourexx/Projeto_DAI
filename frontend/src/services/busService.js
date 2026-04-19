@@ -35,9 +35,8 @@ function simulateMovement(buses) {
     const routeCoords = ROUTE_COORDS[bus.routeLine]
     if (!routeCoords) return bus
 
-    // Acumulador fracionário: speed km/h → ~50m por ponto GTFS → steps/s = speed/180
-    // Ex: 40 km/h → 0.22 steps/s → avança 1 ponto a cada ~4.5 segundos
-    const acc = (bus._acc ?? bus.routeIdx) + bus.speed / 180
+    // 0.1 pontos GTFS por segundo → avança 1 ponto a cada 10 segundos
+    const acc = (bus._acc ?? bus.routeIdx) + 0.1
     const nextIdx = Math.floor(acc) % routeCoords.length
     const [newLat, newLng] = routeCoords[nextIdx]
 
