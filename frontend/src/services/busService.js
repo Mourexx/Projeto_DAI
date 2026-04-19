@@ -41,8 +41,6 @@ function simulateMovement(buses) {
     const nextIdx = (bus.routeIdx + step) % routeCoords.length
     const [newLat, newLng] = routeCoords[nextIdx]
 
-    // Update nextStop
-    const lineStopsArr = Object.entries(ROUTE_COORDS).length  // just to reference
     return {
       ...bus,
       lat: newLat,
@@ -53,19 +51,21 @@ function simulateMovement(buses) {
 }
 
 let _mockBuses = [...MOCK_BUSES]
+let _apiBuses = null
 
 export async function fetchBuses() {
   try {
     const res = await api.get('/transports/')
-    // Map API data — use latitude/longitude fields from backend
-    const buses = res.data
-      .filter(t => t.latitude && t.longitude)
-      .map(t => {
+    const raw = res.data.filter(t => t.latitude && t.longitude)
+    if (raw.length === 0) throw new Error('No coords')
+
+    // Inicializa _apiBuses uma vez com posições da API
+    if (!_apiBuses) {
+      _apiBuses = raw.map(t => {
         const line = t.line
         const rteCoords = ROUTE_COORDS[line] || []
-        // Find closest route point to current position
         let routeIdx = 0
-        if (rteCoords.length > 0 && t.latitude && t.longitude) {
+        if (rteCoords.length > 0) {
           let minD = Infinity
           rteCoords.forEach(([rlat, rlon], i) => {
             const d = Math.hypot(rlat - t.latitude, rlon - t.longitude)
@@ -78,7 +78,7 @@ export async function fetchBuses() {
           lineName: `Linha ${line}`,
           lat: parseFloat(t.latitude),
           lng: parseFloat(t.longitude),
-          speed: t.speed ?? 0,
+          speed: 35 + Math.round(Math.random() * 20), // velocidade simulada
           occupancy: t.current_occupancy ?? 0,
           capacity: t.capacity ?? 60,
           status: t.is_active ? 'active' : 'stopped',
@@ -89,12 +89,11 @@ export async function fetchBuses() {
           routeIdx,
         }
       })
-
-    // If API returns buses with coords, use them; else fallback to mock
-    if (buses.length > 0) {
-      return { buses, source: 'api' }
     }
-    throw new Error('No coords')
+
+    // Avança posição a cada chamada (ciclo de 5 segundos)
+    _apiBuses = simulateMovement(_apiBuses)
+    return { buses: _apiBuses, source: 'api' }
   } catch {
     _mockBuses = simulateMovement(_mockBuses)
     return { buses: _mockBuses, source: 'mock' }
