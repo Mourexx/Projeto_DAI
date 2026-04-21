@@ -36,7 +36,7 @@ export function useBuses() {
     loadBuses()
     intervalRef.current = setInterval(loadBuses, POLL_INTERVAL)
     return () => clearInterval(intervalRef.current)
-  }, [loadBuses, loadLines])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { buses, lines, dataSource, lastUpdate, error, refresh: loadBuses }
 }

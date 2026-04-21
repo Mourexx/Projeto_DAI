@@ -52,6 +52,8 @@ function simulateMovement(buses) {
 
 let _mockBuses = [...MOCK_BUSES]
 let _apiBuses = null
+let _apiBusesAt = 0
+const API_TTL_MS = 30_000 // recarrega posições reais da API a cada 30 s
 
 export async function fetchBuses() {
   try {
@@ -59,8 +61,9 @@ export async function fetchBuses() {
     const raw = res.data.filter(t => t.latitude && t.longitude)
     if (raw.length === 0) throw new Error('No coords')
 
-    // Inicializa _apiBuses uma vez com posições da API
-    if (!_apiBuses) {
+    // Reinicializa _apiBuses ao arrancar e a cada 30 s
+    if (!_apiBuses || Date.now() - _apiBusesAt > API_TTL_MS) {
+      _apiBusesAt = Date.now()
       _apiBuses = raw.map(t => {
         const line = t.line
         const rteCoords = ROUTE_COORDS[line] || []

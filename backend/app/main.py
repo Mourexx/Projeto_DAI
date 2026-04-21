@@ -14,7 +14,8 @@ with engine.connect() as _conn:
         try:
             _conn.execute(text(f"ALTER TYPE tickettype ADD VALUE IF NOT EXISTS '{_val}'"))
             _conn.commit()
-        except Exception:
+        except Exception as e:
+            print(f"⚠️  Failed to add enum value '{_val}': {e}")
             _conn.rollback()
 
 app = FastAPI(

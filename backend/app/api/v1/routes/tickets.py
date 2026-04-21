@@ -79,26 +79,22 @@ def my_tickets(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    # Auto-expire bilhetes cujo prazo já passou
-    tickets = db.query(Ticket).filter(
-        Ticket.user_id == current_user.id,
-        Ticket.status == TicketStatus.active,
-    ).all()
-
-    changed = False
-    for t in tickets:
-        if is_expired(t.valid_until):
-            t.status = TicketStatus.expired
-            changed = True
-    if changed:
-        db.commit()
-
-    return (
+    all_tickets = (
         db.query(Ticket)
         .filter(Ticket.user_id == current_user.id)
         .order_by(Ticket.purchased_at.desc())
         .all()
     )
+
+    changed = False
+    for t in all_tickets:
+        if t.status == TicketStatus.active and is_expired(t.valid_until):
+            t.status = TicketStatus.expired
+            changed = True
+    if changed:
+        db.commit()
+
+    return all_tickets
 
 
 # ─── UC2.3 – Validar Bilhete ────────────────────────────────────────────────
