@@ -41,7 +41,7 @@ def create_user_and_login(email="user@test.com", password="pass123", admin=False
     if admin:
         # Promover a admin diretamente na BD de teste
         db = TestingSessionLocal()
-        from app.db.models.user import User
+        from app.packages.p1_user_management.user import User
         u = db.query(User).filter(User.email == email).first()
         u.is_admin = True
         db.commit()

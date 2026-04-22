@@ -30,7 +30,7 @@ def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
 ):
-    from app.db.models.user import User
+    from app.packages.p1_user_management.user import User
     exc = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Token inválido ou expirado",
