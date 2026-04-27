@@ -233,7 +233,8 @@ def test_cannot_validate_other_users_ticket():
 # ─── Estatísticas ─────────────────────────────────────────────────────────────
 
 def test_stats_overview():
-    r = client.get("/api/v1/stats/overview")
+    token = create_user_and_login("statsov@test.com")
+    r = client.get("/api/v1/stats/overview", headers=auth(token))
     assert r.status_code == 200
     data = r.json()
     for key in ["total_tickets", "active_tickets", "total_revenue", "active_transports", "viagens_em_curso"]:
@@ -244,7 +245,7 @@ def test_stats_tickets_by_type():
     token = create_user_and_login("stats@test.com")
     client.post("/api/v1/tickets/", json={"type": "single"}, headers=auth(token))
     client.post("/api/v1/tickets/", json={"type": "monthly"}, headers=auth(token))
-    r = client.get("/api/v1/stats/tickets-by-type")
+    r = client.get("/api/v1/stats/tickets-by-type", headers=auth(token))
     assert r.status_code == 200
     types = [item["type"] for item in r.json()]
     assert "single" in types
@@ -256,14 +257,15 @@ def test_stats_occupancy():
     client.post("/api/v1/transports/", json={
         "name": "Bus Occ", "type": "bus", "line": "L9", "capacity": 50
     }, headers=auth(token))
-    r = client.get("/api/v1/stats/occupancy")
+    r = client.get("/api/v1/stats/occupancy", headers=auth(token))
     assert r.status_code == 200
     assert len(r.json()) >= 1
     assert "occupancy_pct" in r.json()[0]
 
 
 def test_stats_viagens():
-    r = client.get("/api/v1/stats/viagens")
+    token = create_user_and_login("statsviagens@test.com")
+    r = client.get("/api/v1/stats/viagens", headers=auth(token))
     assert r.status_code == 200
     data = r.json()
     for key in ["total_viagens", "viagens_em_curso", "total_entradas", "total_saidas"]:

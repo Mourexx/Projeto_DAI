@@ -17,6 +17,9 @@ dist/
 # Docker
 *.log
 
+# Test artifacts
+*.db
+
 # IDE
 .vscode/
 .idea/
