@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { fetchBuses, fetchLines } from '../services/busService'
 
-const POLL_INTERVAL = 1000 // atualiza a cada 1 segundo
+const POLL_INTERVAL = 10000 // 10 segundos
 
 export function useBuses() {
   const [buses, setBuses]           = useState([])
@@ -33,8 +33,9 @@ export function useBuses() {
 
   useEffect(() => {
     loadLines()
-    loadBuses()
-    intervalRef.current = setInterval(loadBuses, POLL_INTERVAL)
+    loadBuses().then(() => {
+      intervalRef.current = setInterval(loadBuses, POLL_INTERVAL)
+    })
     return () => clearInterval(intervalRef.current)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

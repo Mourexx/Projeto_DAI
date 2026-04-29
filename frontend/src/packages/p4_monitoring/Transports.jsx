@@ -1,7 +1,7 @@
 // Package {P4} Fleet Monitoring — 4SRS SIBCP v3
 // Implements: {O4.6.c} fleet management
 import { useState, useEffect } from 'react'
-import { transportsApi } from '../../shared/services/api'
+import { transportsApi, linhasApi } from '../../shared/services/api'
 import { useAuth } from '../../shared/Context/AuthContext'
 
 const TYPE_LABEL = { bus: 'Autocarro', tram: '🚃 Elétrico', metro: 'Metro' }
@@ -16,6 +16,7 @@ export default function Transports() {
   const [msg, setMsg] = useState(null)
   const [saving, setSaving] = useState(false)
   const [sortBy, setSortBy] = useState('occupancy')
+  const [linhasDisponiveis, setLinhasDisponiveis] = useState([])
 
   const load = async () => {
     try {
@@ -25,7 +26,12 @@ export default function Transports() {
     finally { setLoading(false) }
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    load()
+    linhasApi.list()
+      .then(r => setLinhasDisponiveis(r.data))
+      .catch(() => {})
+  }, [])
 
   const adicionar = async (e) => {
     e.preventDefault()
@@ -151,7 +157,10 @@ export default function Transports() {
                         <div style={{ fontSize: 12, color: '#9CA3AF', marginTop: 2 }}>{TYPE_LABEL[t.type]}</div>
                       </div>
                       <span style={{ background: '#EBF4FF', color: '#005BAC', fontSize: 11, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>
-                        Linha {t.line}
+                        {(() => {
+                          const l = linhasDisponiveis.find(l => l.codigo === t.line)
+                          return l ? `${l.codigo} — ${l.nome}` : `Linha ${t.line}`
+                        })()}
                       </span>
                     </div>
                     <div>
@@ -195,10 +204,17 @@ export default function Transports() {
                 </div>
                 <div>
                   <label style={lbl}>Linha</label>
-                  <input required value={form.line} onChange={e => setForm(f => ({ ...f, line: e.target.value }))}
-                    placeholder="ex: L3" style={inp}
-                    onFocus={e => e.target.style.borderColor = '#005BAC'}
-                    onBlur={e => e.target.style.borderColor = '#E2E8F0'} />
+                  <select
+                    required
+                    value={form.line}
+                    onChange={e => setForm(f => ({ ...f, line: e.target.value }))}
+                    style={{ width: '100%', border: '1px solid #E2E8F0', borderRadius: 8, padding: '10px 14px', fontSize: 14, outline: 'none', fontFamily: "'DM Sans', sans-serif", background: 'white' }}
+                  >
+                    <option value="">Selecionar linha...</option>
+                    {linhasDisponiveis.map(l => (
+                      <option key={l.codigo} value={l.codigo}>{l.codigo} — {l.nome}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div>

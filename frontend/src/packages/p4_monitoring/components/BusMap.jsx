@@ -27,19 +27,27 @@ export default function BusMap({ buses = [], activeLines, onSelectBus, selectedB
   // Inicializar mapa Leaflet
   useEffect(() => {
     if (mapInstanceRef.current) return
-    const L = window.L
-    if (!L) { console.error('Leaflet não encontrado'); return }
+    const timer = setTimeout(() => {
+      const L = window.L
+      if (!L || !mapRef.current) return
 
-    const map = L.map(mapRef.current, { center: CENTER, zoom: ZOOM })
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 19,
-    }).addTo(map)
+      const map = L.map(mapRef.current, { center: CENTER, zoom: ZOOM })
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+      }).addTo(map)
 
-    mapInstanceRef.current = map
-    setMapReady(true)
+      mapInstanceRef.current = map
+      setMapReady(true)
+    }, 100)
 
-    return () => { map.remove(); mapInstanceRef.current = null }
+    return () => {
+      clearTimeout(timer)
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove()
+        mapInstanceRef.current = null
+      }
+    }
   }, [])
 
   // Desenhar rotas e paragens GTFS reais
