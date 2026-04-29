@@ -106,23 +106,21 @@ export async function fetchBuses() {
 
 export async function fetchLines() {
   try {
-    const res = await api.get('/transports/')
-    const lines = {}
-    res.data.forEach(b => {
-      if (b.line && !lines[b.line]) {
-        lines[b.line] = { id: b.line, name: `Linha ${b.line}`, color: LINE_COLORS[b.line] || '#005BAC' }
-      }
-    })
-    if (Object.keys(lines).length > 0) return Object.values(lines)
-    throw new Error('No lines')
+    const res = await api.get('/linhas/')
+    if (!res.data || res.data.length === 0) throw new Error('No lines')
+    return res.data.map(l => ({
+      id: l.codigo,
+      name: l.nome,
+      color: LINE_COLORS[l.codigo] || '#005BAC',
+    }))
   } catch {
     return [
-      { id: 'L1', name: 'Residência UM → Univ. Minho',    color: LINE_COLORS['L1'] },
-      { id: 'L2', name: 'Ponte de Prado → Bom Jesus',           color: LINE_COLORS['L2'] },
-      { id: 'L3', name: 'Av. Central → Ruães',             color: LINE_COLORS['L3'] },
-      { id: 'L5', name: 'Dume → Quinta da Capela',              color: LINE_COLORS['L5'] },
-      { id: 'L7', name: 'S. Mamede d\'Este → Celeirós',  color: LINE_COLORS['L7'] },
-      { id: 'L8', name: 'R. 25 de Abril → Sete Fontes',        color: LINE_COLORS['L8'] },
+      { id: 'L1', name: 'Residência UM / Universidade do Minho', color: LINE_COLORS['L1'] },
+      { id: 'L2', name: 'Ponte de Prado / Bom Jesus',            color: LINE_COLORS['L2'] },
+      { id: 'L3', name: 'Av. Central / Ruães',                   color: LINE_COLORS['L3'] },
+      { id: 'L5', name: 'Dume / Quinta da Capela',               color: LINE_COLORS['L5'] },
+      { id: 'L7', name: "S. Mamede d'Este / Celeirós",           color: LINE_COLORS['L7'] },
+      { id: 'L8', name: 'Rua 25 de Abril / Sete Fontes',         color: LINE_COLORS['L8'] },
     ]
   }
 }
