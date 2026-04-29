@@ -1,6 +1,6 @@
 // Package Shared — 4SRS SIBCP v3
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Ticket, Bus, Map, LogOut, User, Users, BarChart2, Bell, ChevronRight } from 'lucide-react'
+import { LayoutDashboard, Ticket, Bus, Map, LogOut, User, Users, BarChart2, Bell, ChevronRight, Server, Download } from 'lucide-react'
 import { useAuth } from '../../Context/AuthContext'
 import tubLogo from '../../../assets/Logo_letra_Vermelha.jpg'
 
@@ -25,6 +25,10 @@ export default function Layout({ children }) {
       items: [
         { path: '/map',        label: 'Mapa em Tempo Real', icon: Map },
         { path: '/transports', label: 'Transportes',        icon: Bus },
+        ...(user?.is_admin ? [
+          { path: '/devices', label: 'Dispositivos', icon: Server },
+          { path: '/export',  label: 'Exportacao',   icon: Download },
+        ] : []),
       ]
     },
     {

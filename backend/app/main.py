@@ -7,6 +7,8 @@ from app.packages.p2_ticketing.tickets import router as tickets_router
 from app.packages.p4_monitoring.transports import router as transports_router
 from app.packages.p5_analytics.stats import router as stats_router
 from app.packages.p6_alerts.alerts import router as alerts_router
+from app.packages.p7_devices.devices import router as devices_router
+from app.packages.p8_export.export import router as export_router
 from app.seed import router as seed_router, seed_db
 from app.db.database import engine, Base, get_db
 import app.db.models  # noqa: F401 — regista todos os modelos no SQLAlchemy
@@ -62,6 +64,8 @@ app.include_router(tickets_router,    prefix="/api/v1/tickets",    tags=["Bilhet
 app.include_router(transports_router, prefix="/api/v1/transports", tags=["Transportes"])
 app.include_router(stats_router,      prefix="/api/v1/stats",      tags=["Estatísticas"])
 app.include_router(alerts_router,     prefix="/api/v1/stats",      tags=["Alertas"])
+app.include_router(devices_router,    prefix="/api/v1/devices",    tags=["Dispositivos"])
+app.include_router(export_router,     prefix="/api/v1/export",     tags=["Exportação"])
 app.include_router(seed_router,       prefix="/api/v1/seed",       tags=["Demo"])
 
 

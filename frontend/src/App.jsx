@@ -9,6 +9,8 @@ import Profile     from './packages/p1_user_management/Profile'
 import AdminUsers  from './packages/p1_user_management/AdminUsers'
 import Analytics   from './packages/p5_analytics/Analytics'
 import Alerts      from './packages/p6_alerts/Alerts'
+import Devices     from './packages/p7_devices/Devices'
+import Export      from './packages/p8_export/Export'
 import Layout      from './shared/components/ui/Layout'
 
 function PrivateRoute({ children }) {
@@ -45,6 +47,8 @@ export default function App() {
       <Route path="/analytics" element={<PrivateRoute><Layout><Analytics /></Layout></PrivateRoute>} />
       <Route path="/alerts" element={<PrivateRoute><Layout><Alerts /></Layout></PrivateRoute>} />
       <Route path="/admin/users" element={<AdminRoute><Layout><AdminUsers /></Layout></AdminRoute>} />
+      <Route path="/devices"    element={<AdminRoute><Layout><Devices /></Layout></AdminRoute>} />
+      <Route path="/export"     element={<AdminRoute><Layout><Export  /></Layout></AdminRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

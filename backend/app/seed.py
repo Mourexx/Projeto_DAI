@@ -9,6 +9,9 @@ from app.packages.p4_monitoring.transport import Transport, TransportType
 from app.packages.p2_ticketing.ticket import Ticket, TicketType, TicketStatus
 from app.packages.p4_monitoring.linha import Linha
 from app.core.security import hash_password
+from app.packages.p7_devices.device import Device, DeviceType, DeviceEstado
+from app.packages.p7_devices.device_status import DeviceStatus, StatusAtual
+from app.packages.p7_devices.fault import FaultRecord, FaultEstado
 
 router = APIRouter()
 
@@ -101,6 +104,37 @@ def seed_db(db: Session) -> dict:
                    purchased_at=now - timedelta(hours=2), used_at=now - timedelta(hours=1)),
         ])
         created.append("bilhetes demo admin")
+
+    if db.query(Device).count() == 0:
+        devices_seed = [
+            Device(device_id="DEV-SC-001", tipo=DeviceType.sensor_contagem, fabricante="Wayfair",   numero_serie="WF-12345", veiculo_id="TUB-001", estado=DeviceEstado.ativo),
+            Device(device_id="DEV-SC-003", tipo=DeviceType.sensor_contagem, fabricante="Wayfair",   numero_serie="WF-12346", veiculo_id="TUB-003", estado=DeviceEstado.ativo),
+            Device(device_id="DEV-SC-007", tipo=DeviceType.sensor_contagem, fabricante="Wayfair",   numero_serie="WF-12347", veiculo_id="TUB-007", estado=DeviceEstado.falha),
+            Device(device_id="DEV-SB-002", tipo=DeviceType.sistema_bordo,   fabricante="Teltronic", numero_serie="TT-98001", veiculo_id="TUB-002", estado=DeviceEstado.ativo),
+            Device(device_id="DEV-SB-004", tipo=DeviceType.sistema_bordo,   fabricante="Teltronic", numero_serie="TT-98002", veiculo_id="TUB-004", estado=DeviceEstado.ativo),
+            Device(device_id="DEV-SB-006", tipo=DeviceType.sistema_bordo,   fabricante="Teltronic", numero_serie="TT-98003", veiculo_id="TUB-006", estado=DeviceEstado.ativo),
+        ]
+        db.add_all(devices_seed)
+        db.flush()
+
+        statuses_seed = [
+            DeviceStatus(device_id="DEV-SC-001", estado_atual=StatusAtual.online,  ultimo_heartbeat=now, uptime_percentagem=99.5),
+            DeviceStatus(device_id="DEV-SC-003", estado_atual=StatusAtual.online,  ultimo_heartbeat=now, uptime_percentagem=98.2),
+            DeviceStatus(device_id="DEV-SC-007", estado_atual=StatusAtual.offline, ultimo_heartbeat=None, uptime_percentagem=72.1),
+            DeviceStatus(device_id="DEV-SB-002", estado_atual=StatusAtual.online,  ultimo_heartbeat=now, uptime_percentagem=100.0),
+            DeviceStatus(device_id="DEV-SB-004", estado_atual=StatusAtual.online,  ultimo_heartbeat=now, uptime_percentagem=99.8),
+            DeviceStatus(device_id="DEV-SB-006", estado_atual=StatusAtual.online,  ultimo_heartbeat=now, uptime_percentagem=97.5),
+        ]
+        db.add_all(statuses_seed)
+
+        db.add(FaultRecord(
+            device_id="DEV-SC-007",
+            tipo_falha="Falha de Sensor",
+            descricao="Sensor de contagem não responde — possível falha de hardware",
+            estado=FaultEstado.aberto,
+        ))
+        db.flush()
+        created.append("dispositivos demo")
 
     db.commit()
     return {
