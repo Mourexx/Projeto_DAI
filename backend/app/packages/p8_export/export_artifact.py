@@ -7,12 +7,13 @@ from app.db.database import Base
 
 
 class ArtifactTipo(str, enum.Enum):
-    raw_csv = "raw_csv"
-    raw_json = "raw_json"
-    report_pdf = "report_pdf"
-    report_excel = "report_excel"
+    raw_csv            = "raw_csv"
+    raw_json           = "raw_json"
+    report_json        = "report_json"
+    report_pdf         = "report_pdf"
+    report_excel       = "report_excel"
     normalized_ngsi_ld = "normalized_ngsi_ld"
-    normalized_gtfs = "normalized_gtfs"
+    normalized_gtfs    = "normalized_gtfs"
 
 
 class ArtifactEstado(str, enum.Enum):

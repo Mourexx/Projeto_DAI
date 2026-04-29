@@ -209,7 +209,7 @@ def report_overview(db: Session = Depends(get_db), current_user=Depends(get_curr
 
     content = json.dumps(report, ensure_ascii=False, indent=2)
     _save_artifact(
-        db, ArtifactTipo.report_excel, None,
+        db, ArtifactTipo.report_json, None,
         total_tickets + len(transports), current_user.email, content,
     )
     return report

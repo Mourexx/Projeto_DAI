@@ -51,7 +51,8 @@ export default function AdminUsers() {
   const ativos = filtered.filter(u => u.is_active).length
 
   return (
-    <div style={{ padding: 28, fontFamily: "'DM Sans', sans-serif", minHeight: '100vh', background: '#F4F6F9', overflowY: 'auto' }} className="animate-fadeIn">
+    <div style={{ padding: 28, fontFamily: "'DM Sans', sans-serif", minHeight: '100vh', background: '#F4F6F9', 
+    overflowY: 'auto' }} className="animate-fadeIn">
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A1A1A', margin: '0 0 4px', letterSpacing: -0.3 }}>
           Gestão de Utilizadores
@@ -68,7 +69,8 @@ export default function AdminUsers() {
           { label: 'Administradores', value: admins, icon: '🛡️', color: '#7C3AED' },
           { label: 'Contas Ativas', value: ativos, icon: '', color: '#10B981' },
         ].map((item, i) => (
-          <div key={i} style={{ background: 'white', borderRadius: 12, border: '1px solid #E2E8F0', padding: '16px 20px', display: 'flex', gap: 14, alignItems: 'center' }}>
+          <div key={i} style={{ background: 'white', borderRadius: 12, border: '1px solid #E2E8F0', 
+          padding: '16px 20px', display: 'flex', gap: 14, alignItems: 'center' }}>
             <div style={{ fontSize: 22 }}>{item.icon}</div>
             <div>
               <div style={{ fontSize: 20, fontWeight: 800, color: item.color }}>{item.value}</div>

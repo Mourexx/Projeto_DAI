@@ -3,7 +3,7 @@
 //             {O7.2.i} device monitoring dashboard interface,
 //             {O7.3.i} inventory and fault management interface
 import { useState, useEffect } from 'react'
-import { devicesApi } from '../../shared/services/api'
+import { devicesApi, transportsApi } from '../../shared/services/api'
 import { useAuth } from '../../shared/Context/AuthContext'
 
 const B = '#005BAC'
@@ -66,7 +66,6 @@ const TABS = [
 
 const EMPTY_DEVICE_FORM = { device_id: '', tipo: 'sensor_contagem', fabricante: '', numero_serie: '', veiculo_id: '' }
 const EMPTY_FAULT_FORM  = { tipo_falha: '', descricao: '' }
-const VEHICLES = ['TUB-001','TUB-002','TUB-003','TUB-004','TUB-005','TUB-006','TUB-007','TUB-008']
 
 export default function Devices() {
   const { user } = useAuth()
@@ -75,6 +74,7 @@ export default function Devices() {
   const [devices,       setDevices]       = useState([])
   const [statuses,      setStatuses]      = useState([])
   const [faults,        setFaults]        = useState([])
+  const [vehicles,      setVehicles]      = useState([])
   const [loadingDev,    setLoadingDev]    = useState(true)
   const [loadingStatus, setLoadingStatus] = useState(false)
   const [loadingFaults, setLoadingFaults] = useState(false)
@@ -111,7 +111,13 @@ export default function Devices() {
       .finally(() => setLoadingFaults(false))
   }
 
-  useEffect(() => { loadDevices() }, [])
+  useEffect(() => {
+    loadDevices()
+    loadStatus()
+    transportsApi.list()
+      .then(r => setVehicles(r.data.map(t => t.name)))
+      .catch(() => setVehicles([]))
+  }, [])
 
   useEffect(() => {
     if (activeTab === 'status')  loadStatus()
@@ -351,7 +357,7 @@ export default function Devices() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                   <thead>
                     <tr style={{ borderBottom: '2px solid #F1F5F9' }}>
-                      {['Dispositivo', 'Tipo Falha', 'Descricao', 'Estado', 'Criado em', 'Acao Corretiva', ...(user?.is_admin ? ['Acoes'] : [])].map(h => (
+                      {['Dispositivo', 'Tipo Falha', 'Descricao', 'Estado', 'Criado em', 'Acao Corretiva', 'Reportado por', ...(user?.is_admin ? ['Acoes'] : [])].map(h => (
                         <th key={h} style={thStyle}>{h}</th>
                       ))}
                     </tr>
@@ -372,6 +378,7 @@ export default function Devices() {
                           {f.criado_em ? new Date(f.criado_em).toLocaleDateString('pt-PT') : '—'}
                         </td>
                         <td style={{ ...tdStyle, color: '#64748B' }}>{f.acao_corretiva || '—'}</td>
+                        <td style={{ ...tdStyle, color: '#9CA3AF', fontSize: 12 }}>{f.criado_por_email || '—'}</td>
                         {user?.is_admin && (
                           <td style={tdStyle}>
                             <button onClick={() => handleResolveFault(f.id)} style={{
@@ -425,7 +432,7 @@ export default function Devices() {
                 <label style={labelStyle}>Veiculo (opcional)</label>
                 <select value={modalForm.veiculo_id} onChange={e => setModalForm(f => ({ ...f, veiculo_id: e.target.value }))} style={inputStyle}>
                   <option value="">Sem associacao</option>
-                  {VEHICLES.map(v => <option key={v} value={v}>{v}</option>)}
+                  {vehicles.map(v => <option key={v} value={v}>{v}</option>)}
                 </select>
               </div>
             </div>

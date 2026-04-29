@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.packages.p4_monitoring.transport import Transport
 from app.packages.p1_user_management.user import User
+from app.packages.p7_devices.device import Device, DeviceEstado
+from app.packages.p7_devices.device_status import DeviceStatus, StatusAtual
 from app.core.security import get_current_user
 
 router = APIRouter()
@@ -57,9 +59,39 @@ def get_alerts(db: Session = Depends(get_db), _: User = Depends(get_current_user
                 "message": f"Veículo {t.name} sem passageiros — possível anomalia de leitura",
             })
 
+    # UC6.3 — sensor failure detection controller {O6.3.c}
+    # consults device registry data {O7.1.d} and device status data {O7.2.d}
+    devices_falha = db.query(Device).filter(Device.estado == DeviceEstado.falha).all()
+    for d in devices_falha:
+        alerts.append({
+            "type": "falha_sensor",
+            "device_id": d.device_id,
+            "transport_name": d.veiculo_id or "Desconhecido",
+            "line": None,
+            "severity": "critical",
+            "message": f"Dispositivo {d.device_id} em estado de falha (veículo: {d.veiculo_id or 'N/A'})",
+        })
+
+    devices_offline = db.query(DeviceStatus).filter(DeviceStatus.estado_atual == StatusAtual.offline).all()
+    for s in devices_offline:
+        device = db.query(Device).filter(
+            Device.device_id == s.device_id,
+            Device.estado == DeviceEstado.ativo
+        ).first()
+        if device:
+            alerts.append({
+                "type": "sensor_offline",
+                "device_id": s.device_id,
+                "transport_name": device.veiculo_id or "Desconhecido",
+                "line": None,
+                "severity": "warning",
+                "message": f"Dispositivo {s.device_id} offline (veículo: {device.veiculo_id or 'N/A'})",
+            })
+
     return {
         "total": len(alerts),
         "critical": sum(1 for a in alerts if a["severity"] == "critical"),
-        "warning": sum(1 for a in alerts if a["severity"] == "warning"),
-        "alerts": alerts,
+        "warning":  sum(1 for a in alerts if a["severity"] == "warning"),
+        "info":     sum(1 for a in alerts if a["severity"] == "info"),
+        "alerts":   alerts,
     }

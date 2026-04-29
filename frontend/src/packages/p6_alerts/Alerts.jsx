@@ -1,5 +1,4 @@
 // Package {P6} Alerts — 4SRS SIBCP v3
-// Implements: {O6.1.c} alert detection, {O6.2.c} anomaly detection, {O6.3.c} sensor failure detection
 // UC6 – Gerar Alertas e Notificações
 // UC6.1 – Detetar Sobrelotação
 // UC6.2 – Detetar Anomalias de Procura

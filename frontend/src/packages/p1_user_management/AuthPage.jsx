@@ -1,5 +1,4 @@
-// Package {P1} User Management — 4SRS SIBCP v3
-// Implements: {O1.1.c} login, {O1.2.c} register
+
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../shared/Context/AuthContext.jsx'

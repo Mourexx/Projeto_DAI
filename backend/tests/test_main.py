@@ -270,3 +270,116 @@ def test_stats_viagens():
     data = r.json()
     for key in ["total_viagens", "viagens_em_curso", "total_entradas", "total_saidas"]:
         assert key in data
+
+
+# ─── Dispositivos {P7} ────────────────────────────────────────────────────────
+
+def test_list_devices_requires_auth():
+    r = client.get("/api/v1/devices/")
+    assert r.status_code == 401
+
+def test_create_device_requires_admin():
+    token = create_user_and_login("u_dev1@test.com")
+    r = client.post("/api/v1/devices/", json={
+        "device_id": "DEV-T01", "tipo": "sensor_contagem",
+        "fabricante": "TestCo", "numero_serie": "SN-001"
+    }, headers=auth(token))
+    assert r.status_code == 403
+
+def test_create_device_admin_ok():
+    token = create_user_and_login("a_dev1@test.com", admin=True)
+    r = client.post("/api/v1/devices/", json={
+        "device_id": "DEV-T02", "tipo": "sensor_contagem",
+        "fabricante": "TestCo", "numero_serie": "SN-002"
+    }, headers=auth(token))
+    assert r.status_code == 201
+    assert r.json()["device_id"] == "DEV-T02"
+
+def test_device_heartbeat():
+    token_admin = create_user_and_login("a_dev2@test.com", admin=True)
+    token_user  = create_user_and_login("u_dev2@test.com")
+    client.post("/api/v1/devices/", json={
+        "device_id": "DEV-HB1", "tipo": "sistema_bordo",
+        "fabricante": "TestCo", "numero_serie": "SN-003"
+    }, headers=auth(token_admin))
+    r = client.post("/api/v1/devices/DEV-HB1/heartbeat", headers=auth(token_user))
+    assert r.status_code == 200
+    assert r.json()["estado_atual"] == "online"
+
+def test_create_fault_and_list():
+    token_admin = create_user_and_login("a_dev3@test.com", admin=True)
+    token_user  = create_user_and_login("u_dev3@test.com")
+    client.post("/api/v1/devices/", json={
+        "device_id": "DEV-FL1", "tipo": "sensor_contagem",
+        "fabricante": "TestCo", "numero_serie": "SN-004"
+    }, headers=auth(token_admin))
+    r = client.post("/api/v1/devices/DEV-FL1/faults", json={
+        "tipo_falha": "Teste", "descricao": "Falha de teste"
+    }, headers=auth(token_user))
+    assert r.status_code == 201
+    assert r.json()["estado"] == "aberto"
+
+def test_open_faults_admin_only():
+    token = create_user_and_login("u_dev4@test.com")
+    r = client.get("/api/v1/devices/faults/open", headers=auth(token))
+    assert r.status_code == 403
+
+
+# ─── Exportação {P8} ──────────────────────────────────────────────────────────
+
+def test_export_requires_admin():
+    token = create_user_and_login("u_exp1@test.com")
+    r = client.get("/api/v1/export/raw/tickets?format=csv", headers=auth(token))
+    assert r.status_code == 403
+
+def test_export_tickets_csv():
+    token = create_user_and_login("a_exp1@test.com", admin=True)
+    r = client.get("/api/v1/export/raw/tickets?format=csv", headers=auth(token))
+    assert r.status_code == 200
+    assert "text/csv" in r.headers["content-type"]
+
+def test_export_tickets_json():
+    token = create_user_and_login("a_exp2@test.com", admin=True)
+    r = client.get("/api/v1/export/raw/tickets?format=json", headers=auth(token))
+    assert r.status_code == 200
+
+def test_export_ngsi_ld_structure():
+    token = create_user_and_login("a_exp3@test.com", admin=True)
+    r = client.get("/api/v1/export/normalized/ngsi-ld", headers=auth(token))
+    assert r.status_code == 200
+    data = r.json()
+    if len(data) > 0:
+        assert data[0]["id"].startswith("urn:ngsi-ld:")
+        assert data[0]["type"] == "Vehicle"
+        assert data[0]["location"]["type"] == "GeoProperty"
+
+def test_export_gtfs():
+    token = create_user_and_login("a_exp4@test.com", admin=True)
+    r = client.get("/api/v1/export/normalized/gtfs", headers=auth(token))
+    assert r.status_code == 200
+    assert "text/csv" in r.headers["content-type"]
+
+def test_export_history_records():
+    token = create_user_and_login("a_exp5@test.com", admin=True)
+    client.get("/api/v1/export/raw/tickets?format=csv", headers=auth(token))
+    r = client.get("/api/v1/export/history", headers=auth(token))
+    assert r.status_code == 200
+    assert len(r.json()) >= 1
+
+def test_report_overview_structure():
+    token = create_user_and_login("a_exp6@test.com", admin=True)
+    r = client.get("/api/v1/export/report/overview", headers=auth(token))
+    assert r.status_code == 200
+    data = r.json()
+    assert "kpis" in data
+    assert "bilhetes" in data
+    assert "ocupacao" in data
+    assert "gerado_em" in data
+
+
+# ─── Linhas {P4} ──────────────────────────────────────────────────────────────
+
+def test_list_linhas():
+    r = client.get("/api/v1/linhas/")
+    assert r.status_code == 200
+    assert isinstance(r.json(), list)

@@ -5,6 +5,7 @@ from sqlalchemy import text
 from app.packages.p1_user_management.users import router as users_router
 from app.packages.p2_ticketing.tickets import router as tickets_router
 from app.packages.p4_monitoring.transports import router as transports_router
+from app.packages.p4_monitoring.linhas import router as linhas_router
 from app.packages.p5_analytics.stats import router as stats_router
 from app.packages.p6_alerts.alerts import router as alerts_router
 from app.packages.p7_devices.devices import router as devices_router
@@ -14,6 +15,7 @@ from app.db.database import engine, Base, get_db
 import app.db.models  # noqa: F401 — regista todos os modelos no SQLAlchemy
 
 _NEW_TICKET_TYPES = ['single_1coroa', 'single_2coroa', 'transfer_1coroa', 'transfer_2coroa']
+_NEW_ARTIFACT_TYPES = ['report_json']
 
 
 @asynccontextmanager
@@ -27,6 +29,15 @@ async def lifespan(app: FastAPI):
                 conn.commit()
             except Exception as e:
                 print(f"⚠️  Enum '{val}': {e}")
+                conn.rollback()
+
+    with engine.connect() as conn:
+        for val in _NEW_ARTIFACT_TYPES:
+            try:
+                conn.execute(text(f"ALTER TYPE artifacttipo ADD VALUE IF NOT EXISTS '{val}'"))
+                conn.commit()
+            except Exception as e:
+                print(f"⚠️  Enum artifact '{val}': {e}")
                 conn.rollback()
 
     db = next(get_db())
@@ -62,6 +73,7 @@ app.add_middleware(
 app.include_router(users_router,      prefix="/api/v1/users",      tags=["Utilizadores"])
 app.include_router(tickets_router,    prefix="/api/v1/tickets",    tags=["Bilhetes"])
 app.include_router(transports_router, prefix="/api/v1/transports", tags=["Transportes"])
+app.include_router(linhas_router,     prefix="/api/v1/linhas",     tags=["Linhas"])
 app.include_router(stats_router,      prefix="/api/v1/stats",      tags=["Estatísticas"])
 app.include_router(alerts_router,     prefix="/api/v1/stats",      tags=["Alertas"])
 app.include_router(devices_router,    prefix="/api/v1/devices",    tags=["Dispositivos"])

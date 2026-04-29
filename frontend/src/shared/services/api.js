@@ -62,6 +62,11 @@ export const devicesApi = {
   updateFault:   (faultId, data)   => api.patch(`/devices/faults/${faultId}`, data),
 }
 
+// UC4.4 – Linhas
+export const linhasApi = {
+  list: () => api.get('/linhas/'),
+}
+
 // UC8 – Exportação
 export const exportApi = {
   rawTickets:     (format) => api.get(`/export/raw/tickets?format=${format}`,     { responseType: 'blob' }),

@@ -81,6 +81,7 @@ def _fault_dict(f: FaultRecord) -> dict:
         "acao_corretiva": f.acao_corretiva,
         "criado_em": f.criado_em.isoformat() if f.criado_em else None,
         "resolvido_em": f.resolvido_em.isoformat() if f.resolvido_em else None,
+        "criado_por_email": f.criado_por_email,
     }
 
 
@@ -93,15 +94,21 @@ def get_all_statuses(db: Session = Depends(get_db), _=Depends(get_current_user))
     statuses = db.query(DeviceStatus).all()
     result = []
     for s in statuses:
+        device = db.query(Device).filter(Device.device_id == s.device_id).first()
         hb = s.ultimo_heartbeat
         if hb is not None and hb.tzinfo is None:
             hb = hb.replace(tzinfo=timezone.utc)
-        if hb is None or (now - hb) > timedelta(minutes=5):
+
+        if device and device.estado == DeviceEstado.falha:
+            effective = StatusAtual.erro
+        elif hb is None or (now - hb) > timedelta(minutes=5):
             effective = StatusAtual.offline
         else:
             effective = s.estado_atual
+
         row = _status_dict(s)
         row["estado_atual"] = effective
+        row["veiculo_id"] = device.veiculo_id if device else None
         result.append(row)
     return result
 
@@ -234,12 +241,12 @@ def create_fault(
     device_id: str,
     body: FaultCreate,
     db: Session = Depends(get_db),
-    _=Depends(get_current_user),
+    current_user=Depends(get_current_user),
 ):
     """UC7.3 — Criar ticket de falha para um dispositivo."""
     if not db.query(Device).filter(Device.device_id == device_id).first():
         raise HTTPException(status_code=404, detail="Dispositivo não encontrado")
-    fault = FaultRecord(device_id=device_id, **body.model_dump())
+    fault = FaultRecord(device_id=device_id, criado_por_email=current_user.email, **body.model_dump())
     db.add(fault)
     db.commit()
     db.refresh(fault)

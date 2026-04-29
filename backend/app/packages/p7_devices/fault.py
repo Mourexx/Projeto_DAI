@@ -23,3 +23,4 @@ class FaultRecord(Base):
     acao_corretiva = Column(String, nullable=True)
     criado_em = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     resolvido_em = Column(DateTime(timezone=True), nullable=True)
+    criado_por_email = Column(String, nullable=True)

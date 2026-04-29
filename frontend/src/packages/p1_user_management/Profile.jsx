@@ -1,5 +1,4 @@
-// Package {P1} User Management — 4SRS SIBCP v3
-// Implements: {O1.3.c} profile management
+
 import { useState } from 'react'
 import { useAuth } from '../../shared/Context/AuthContext'
 import api from '../../shared/services/api'
