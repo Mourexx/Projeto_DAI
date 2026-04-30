@@ -33,20 +33,46 @@ function TicketCard({ ticket, onValidar, validating }) {
   const s = STATUS[ticket.status] || STATUS['active']
   const isActive = ticket.status === 'active'
   return (
-    <div style={{ background: 'white', borderRadius: 12, border: `1px solid ${isActive ? '#BBF7D0' : '#E2E8F0'}`, padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+    <div style={{
+      background: 'white',
+      borderRadius: 12,
+      border: `1px solid ${isActive ? '#BBF7D0' : '#E2E8F0'}`,
+      padding: '20px',
+      boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      minHeight: 280,
+    }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
-        <div>
+        <div style={{ flex: 1, minHeight: 78 }}>
           <TicketIcon size={22} color={isActive ? B : '#94A3B8'} strokeWidth={1.8} style={{ marginBottom: 8 }} />
-          <div style={{ fontWeight: 800, fontSize: 15, color: '#1E293B' }}>{tipo.label || ticket.type}</div>
-          <div style={{ fontSize: 12, color: '#94A3B8' }}>{tipo.descricao}</div>
+          <div style={{ fontWeight: 800, fontSize: 15, color: '#1E293B', marginBottom: 4 }}>
+            {tipo.label || ticket.type}
+          </div>
+          <div style={{ fontSize: 12, color: '#94A3B8', lineHeight: 1.4 }}>
+            {tipo.descricao}
+          </div>
         </div>
-        <span style={{ background: s.bg, color: s.color, fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>{s.label}</span>
+        <span style={{ background: s.bg, color: s.color, fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 20, whiteSpace: 'nowrap', marginLeft: 8 }}>
+          {s.label}
+        </span>
       </div>
-      <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: 12, marginBottom: 14 }}>
-        <div style={{ fontSize: 22, fontWeight: 800, color: isActive ? B : '#94A3B8' }}>{ticket.price.toFixed(2)} €</div>
-        <div style={{ fontSize: 11, color: '#94A3B8', marginTop: 4 }}>Comprado: {fmt(ticket.purchased_at)}</div>
-        {ticket.valid_until && <div style={{ fontSize: 11, color: '#64748B', fontWeight: 600, marginTop: 2 }}>Válido até: {fmt(ticket.valid_until)}</div>}
+
+      <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: 12, marginBottom: 14, flex: 1 }}>
+        <div style={{ fontSize: 22, fontWeight: 800, color: isActive ? B : '#94A3B8' }}>
+          {ticket.price.toFixed(2)} €
+        </div>
+        <div style={{ fontSize: 11, color: '#94A3B8', marginTop: 4 }}>
+          Comprado: {fmt(ticket.purchased_at)}
+        </div>
+        {ticket.valid_until && (
+          <div style={{ fontSize: 11, color: '#64748B', fontWeight: 600, marginTop: 2 }}>
+            Válido até: {fmt(ticket.valid_until)}
+          </div>
+        )}
       </div>
+
       {isActive ? (
         <button onClick={() => onValidar(ticket.id)} disabled={busy} style={{
           width: '100%', padding: '10px', borderRadius: 8, border: 'none',
