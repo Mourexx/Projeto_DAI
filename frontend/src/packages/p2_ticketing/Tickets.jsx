@@ -44,7 +44,7 @@ function TicketCard({ ticket, onValidar, validating }) {
       height: '100%',
       minHeight: 280,
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16, minHeight: 90 }}>
         <div style={{ flex: 1, minHeight: 78 }}>
           <TicketIcon size={22} color={isActive ? B : '#94A3B8'} strokeWidth={1.8} style={{ marginBottom: 8 }} />
           <div style={{ fontWeight: 800, fontSize: 15, color: '#1E293B', marginBottom: 4 }}>
@@ -209,7 +209,7 @@ export default function Tickets() {
             {ativos.length > 0 && (
               <div style={{ marginBottom: 28 }}>
                 <h2 style={{ fontSize: 11, fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>Bilhetes Ativos ({ativos.length})</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14, alignItems: 'stretch' }}>
                   {ativos.map(t => <TicketCard key={t.id} ticket={t} onValidar={validar} validating={validating} />)}
                 </div>
               </div>
