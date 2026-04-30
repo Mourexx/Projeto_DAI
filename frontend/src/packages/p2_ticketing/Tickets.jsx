@@ -39,27 +39,28 @@ function TicketCard({ ticket, onValidar, validating }) {
       border: `1px solid ${isActive ? '#BBF7D0' : '#E2E8F0'}`,
       padding: '20px',
       boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
-      display: 'flex',
-      flexDirection: 'column',
+      display: 'grid',
+      gridTemplateRows: '32px 24px 36px 1fr 40px',
+      gap: 8,
       height: '100%',
-      minHeight: 280,
+      minHeight: 320,
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
-        <div style={{ flex: 1, height: 90, overflow: 'hidden' }}>
-          <TicketIcon size={22} color={isActive ? B : '#94A3B8'} strokeWidth={1.8} style={{ marginBottom: 8 }} />
-          <div style={{ fontWeight: 800, fontSize: 15, color: '#1E293B', marginBottom: 4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {tipo.label || ticket.type}
-          </div>
-          <div style={{ fontSize: 12, color: '#94A3B8', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-            {tipo.descricao}
-          </div>
-        </div>
-        <span style={{ background: s.bg, color: s.color, fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 20, whiteSpace: 'nowrap', marginLeft: 8 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <TicketIcon size={22} color={isActive ? B : '#94A3B8'} strokeWidth={1.8} />
+        <span style={{ background: s.bg, color: s.color, fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 20, whiteSpace: 'nowrap' }}>
           {s.label}
         </span>
       </div>
 
-      <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: 12, marginBottom: 14, flex: 1 }}>
+      <div style={{ fontWeight: 800, fontSize: 15, color: '#1E293B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', alignSelf: 'center' }}>
+        {tipo.label || ticket.type}
+      </div>
+
+      <div style={{ fontSize: 12, color: '#94A3B8', lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+        {tipo.descricao}
+      </div>
+
+      <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: 12 }}>
         <div style={{ fontSize: 22, fontWeight: 800, color: isActive ? B : '#94A3B8' }}>
           {ticket.price.toFixed(2)} €
         </div>
@@ -75,7 +76,7 @@ function TicketCard({ ticket, onValidar, validating }) {
 
       {isActive ? (
         <button onClick={() => onValidar(ticket.id)} disabled={busy} style={{
-          width: '100%', padding: '10px', borderRadius: 8, border: 'none',
+          width: '100%', borderRadius: 8, border: 'none',
           cursor: busy ? 'not-allowed' : 'pointer',
           background: busy ? '#94A3B8' : B,
           color: 'white', fontWeight: 700, fontSize: 13,
@@ -87,9 +88,9 @@ function TicketCard({ ticket, onValidar, validating }) {
         </button>
       ) : (
         <div style={{
-          width: '100%', padding: '10px', borderRadius: 8,
+          width: '100%', borderRadius: 8,
           background: '#F8FAFC', color: '#94A3B8',
-          fontWeight: 600, fontSize: 13, textAlign: 'center',
+          fontWeight: 600, fontSize: 13,
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
         }}>
           {ticket.status === 'used' ? <><CheckCircle size={14} /> Já utilizado</> : <><XCircle size={14} /> Expirado</>}
