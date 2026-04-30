@@ -153,14 +153,14 @@ export default function Transports() {
                   <div key={t.id} style={{ background: 'white', borderRadius: 12, border: '1px solid #E2E8F0', padding: '18px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10, gap: 10 }}>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 11, fontWeight: 700, color: '#9CA3AF', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>
-                          {t.name} · {TYPE_LABEL[t.type] || 'Autocarro'}
-                        </div>
-                        <div style={{ fontSize: 14, fontWeight: 800, color: '#1A1A1A', lineHeight: 1.3 }}>
+                        <div style={{ fontSize: 15, fontWeight: 800, color: '#1A1A1A', lineHeight: 1.3, marginBottom: 4 }}>
                           {(() => {
                             const l = linhasDisponiveis.find(l => String(l.codigo) === String(t.line))
                             return l ? `Linha ${l.codigo} — ${l.nome}` : `Linha ${t.line}`
                           })()}
+                        </div>
+                        <div style={{ fontSize: 11, fontWeight: 600, color: '#9CA3AF', letterSpacing: 0.5, textTransform: 'uppercase', marginTop: 2 }}>
+                          {t.name} · {TYPE_LABEL[t.type] || 'Autocarro'}
                         </div>
                       </div>
                     </div>

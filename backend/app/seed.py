@@ -71,6 +71,13 @@ def seed_db(db: Session) -> dict:
             ("TUB-006", TransportType.bus, "5",  60, 38, 41.574310, -8.437940),
             ("TUB-007", TransportType.bus, "74", 60, 71, 41.554462, -8.381193),
             ("TUB-008", TransportType.bus, "87", 60, 51, 41.551570, -8.409610),
+            ("TUB-009", TransportType.bus, "7",  60, 22, 41.548120, -8.395840),
+            ("TUB-010", TransportType.bus, "8",  60, 35, 41.553620, -8.423050),
+            ("TUB-011", TransportType.bus, "9",  60, 18, 41.567240, -8.412380),
+            ("TUB-012", TransportType.bus, "12", 60, 44, 41.561940, -8.418720),
+            ("TUB-013", TransportType.bus, "14", 60, 28, 41.546880, -8.426110),
+            ("TUB-014", TransportType.bus, "41", 55, 12, 41.554120, -8.420450),
+            ("TUB-015", TransportType.bus, "43", 60, 33, 41.557310, -8.398200),
         ]
         for name, ttype, line, cap, occ, lat, lon in transportes:
             db.add(Transport(

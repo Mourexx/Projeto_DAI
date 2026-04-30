@@ -81,17 +81,25 @@ export default function Alerts() {
   }, [])
 
   // Map backend alerts to display format
-  const allAlerts = (alertData?.alerts || []).map(a => ({
-    type: a.type,
-    title: a.type === 'sobrelotacao_critica' ? `Sobrelotação Crítica — ${a.transport_name}`
-         : a.type === 'sobrelotacao'         ? `Sobrelotação — ${a.transport_name}`
-         : a.type === 'anomalia_procura'     ? `Baixa Procura — ${a.transport_name}`
-         : a.transport_name,
-    description: a.message,
-    severity: a.severity,
-    linha: a.line,
-    timestamp: now,
-  }))
+  const allAlerts = (alertData?.alerts || []).map(a => {
+    const linhaInfo = a.line ? linhasDisponiveis.find(l => String(l.codigo) === String(a.line)) : null
+    const linhaTitulo = linhaInfo
+      ? `Linha ${linhaInfo.codigo} — ${linhaInfo.nome}`
+      : (a.line ? `Linha ${a.line}` : a.transport_name)
+    return {
+      type: a.type,
+      title: a.type === 'sobrelotacao_critica' ? `Sobrelotação Crítica — ${linhaTitulo}`
+           : a.type === 'sobrelotacao'         ? `Sobrelotação — ${linhaTitulo}`
+           : a.type === 'anomalia_procura'     ? `Baixa Procura — ${linhaTitulo}`
+           : a.type === 'falha_sensor'         ? `Falha de Sensor — ${a.transport_name}`
+           : a.type === 'sensor_offline'       ? `Dispositivo Offline — ${a.transport_name}`
+           : a.transport_name,
+      description: a.message || `Veículo ${a.transport_name} com ocupação ${a.severity === 'critical' ? 'crítica' : 'elevada'}`,
+      severity: a.severity,
+      linha: a.line,
+      timestamp: now,
+    }
+  })
 
   const filtered = filter === 'all'      ? allAlerts
     : filter === 'critical' ? allAlerts.filter(a => a.severity === 'critical')
