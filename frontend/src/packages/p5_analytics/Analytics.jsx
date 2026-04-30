@@ -47,8 +47,17 @@ export default function Analytics() {
       statsApi.getViagens(),
     ]).then(([ov, tt, occ, vg]) => {
       setOverview(ov.data)
+      const TICKET_LABELS = {
+        single_1coroa:   'Bilhete 1 Coroa',
+        single_2coroa:   'Bilhete 2 Coroas',
+        transfer_1coroa: 'Transbordo 1 Coroa',
+        transfer_2coroa: 'Transbordo 2 Coroas',
+        single:   'Bilhete Simples',
+        daily:    'Bilhete Diário',
+        monthly:  'Passe Mensal',
+      }
       setTicketTypes(tt.data.map(t => ({
-        name: { single: 'Simples', daily: 'Diário', monthly: 'Mensal' }[t.type] || t.type,
+        name: TICKET_LABELS[t.type] || t.type,
         value: t.count,
       })))
       setOccupancy(occ.data.map(t => ({
@@ -251,19 +260,23 @@ export default function Analytics() {
           </div>
           <div style={{ background: 'white', borderRadius: 12, border: '1px solid #E2E8F0', padding: '20px 22px' }}>
             <h3 style={{ fontSize: 15, fontWeight: 700, color: '#1A1A1A', margin: '0 0 16px' }}>Contagem de Passageiros</h3>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={[
-                { name: 'Entradas', value: viagens.total_entradas },
-                { name: 'Saídas', value: viagens.total_saidas },
-                { name: 'Saldo', value: viagens.total_entradas - viagens.total_saidas },
-              ]} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#F0F0F0" />
-                <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#9CA3AF' }} />
-                <YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} />
-                <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #E2E8F0', fontSize: 12 }} />
-                <Bar dataKey="value" fill="#005BAC" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24, height: 200, padding: '20px 30px', borderBottom: '2px solid #E2E8F0' }}>
+              {[
+                { label: 'Entradas', valor: viagens?.total_entradas ?? 0, color: '#10B981' },
+                { label: 'Saídas',   valor: viagens?.total_saidas ?? 0,   color: '#F59E0B' },
+                { label: 'Saldo',    valor: viagens?.passageiros_a_bordo ?? (viagens?.total_entradas ?? 0) - (viagens?.total_saidas ?? 0), color: '#3B82F6' },
+              ].map(d => {
+                const max = Math.max(viagens?.total_entradas ?? 0, viagens?.total_saidas ?? 0, 1)
+                const altura = max > 0 ? (Math.abs(d.valor) / max) * 140 : 4
+                return (
+                  <div key={d.label} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 14, fontWeight: 800, color: d.color }}>{d.valor}</span>
+                    <div style={{ width: '100%', height: Math.max(altura, 4), background: d.color, borderRadius: '8px 8px 0 0' }} />
+                    <span style={{ fontSize: 12, color: '#64748B', marginTop: 4 }}>{d.label}</span>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
       )}

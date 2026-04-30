@@ -37,7 +37,7 @@ function TicketCard({ ticket, onValidar, validating }) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
         <div>
           <TicketIcon size={22} color={isActive ? B : '#94A3B8'} strokeWidth={1.8} style={{ marginBottom: 8 }} />
-          <div style={{ fontWeight: 800, fontSize: 15, color: '#1E293B' }}>{tipo.label}</div>
+          <div style={{ fontWeight: 800, fontSize: 15, color: '#1E293B' }}>{tipo.label || ticket.type}</div>
           <div style={{ fontSize: 12, color: '#94A3B8' }}>{tipo.descricao}</div>
         </div>
         <span style={{ background: s.bg, color: s.color, fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>{s.label}</span>
@@ -206,7 +206,7 @@ export default function Tickets() {
                         const s = STATUS[t.status] || {}
                         return (
                           <tr key={t.id} className="hover-row" style={{ borderBottom: '1px solid #F8FAFC' }}>
-                            <td style={{ padding: '12px 20px', fontWeight: 600 }}>{tipo.label}</td>
+                            <td style={{ padding: '12px 20px', fontWeight: 600 }}>{tipo.label || t.type}</td>
                             <td style={{ padding: '12px 20px' }}>{t.price.toFixed(2)} €</td>
                             <td style={{ padding: '12px 20px', color: '#94A3B8' }}>{fmt(t.purchased_at)}</td>
                             <td style={{ padding: '12px 20px', color: '#94A3B8' }}>{fmt(t.valid_until)}</td>

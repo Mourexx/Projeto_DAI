@@ -12,6 +12,8 @@ from app.core.security import hash_password
 from app.packages.p7_devices.device import Device, DeviceType, DeviceEstado
 from app.packages.p7_devices.device_status import DeviceStatus, StatusAtual
 from app.packages.p7_devices.fault import FaultRecord, FaultEstado
+from app.packages.p3_operational.viagem import Viagem
+from app.packages.p3_operational.contagem import ContagemPassageiros, TipoEvento
 
 router = APIRouter()
 
@@ -149,6 +151,81 @@ def seed_db(db: Session) -> dict:
         ))
         db.flush()
         created.append("dispositivos demo")
+
+    if db.query(Viagem).count() == 0:
+        transportes_db = db.query(Transport).all()
+        linhas_db = {l.codigo: l for l in db.query(Linha).all()}
+
+        viagens_demo = []
+
+        for i, t in enumerate(transportes_db[:5]):
+            linha = linhas_db.get(t.line)
+            if not linha:
+                continue
+            v = Viagem(
+                linha_id=linha.id,
+                matricula_autobus=t.name,
+                data_inicio=now - timedelta(minutes=15 + i * 5),
+                data_fim=None,
+                em_curso=True,
+                total_entradas=t.current_occupancy + 8,
+                total_saidas=8,
+                ocupacao_atual=t.current_occupancy,
+                capacidade_maxima=t.capacity,
+                latitude=t.latitude,
+                longitude=t.longitude,
+            )
+            db.add(v)
+            viagens_demo.append(v)
+
+        for i, t in enumerate(transportes_db[:10]):
+            linha = linhas_db.get(t.line)
+            if not linha:
+                continue
+            entradas = 25 + (i * 3) % 30
+            saidas = entradas - (i % 5)
+            v = Viagem(
+                linha_id=linha.id,
+                matricula_autobus=t.name,
+                data_inicio=now - timedelta(hours=2 + i, minutes=10),
+                data_fim=now - timedelta(hours=1 + i, minutes=20),
+                em_curso=False,
+                total_entradas=entradas,
+                total_saidas=saidas,
+                ocupacao_atual=0,
+                capacidade_maxima=t.capacity,
+                latitude=t.latitude,
+                longitude=t.longitude,
+            )
+            db.add(v)
+            viagens_demo.append(v)
+
+        db.flush()
+
+        paragens_demo = ['Praça da República', 'Av. Central', 'Universidade do Minho',
+                         'Hospital de Braga', 'Estação CF', 'Sete Fontes', 'Bom Jesus']
+        for v in viagens_demo:
+            n_paragens = min(len(paragens_demo), max(2, v.total_entradas // 5))
+            for j in range(n_paragens):
+                qty_in = max(1, v.total_entradas // n_paragens)
+                qty_out = max(1, v.total_saidas // n_paragens) if v.total_saidas > 0 else 0
+                db.add(ContagemPassageiros(
+                    viagem_id=v.id,
+                    paragem=paragens_demo[j % len(paragens_demo)],
+                    tipo_evento=TipoEvento.entrada,
+                    quantidade=qty_in,
+                    timestamp=v.data_inicio + timedelta(minutes=j * 4),
+                ))
+                if qty_out > 0:
+                    db.add(ContagemPassageiros(
+                        viagem_id=v.id,
+                        paragem=paragens_demo[j % len(paragens_demo)],
+                        tipo_evento=TipoEvento.saida,
+                        quantidade=qty_out,
+                        timestamp=v.data_inicio + timedelta(minutes=j * 4 + 2),
+                    ))
+
+        created.append("viagens demo (5 em curso + 10 concluídas)")
 
     db.commit()
     return {
