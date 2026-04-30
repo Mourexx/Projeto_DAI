@@ -44,7 +44,7 @@ function TicketCard({ ticket, onValidar, validating }) {
       height: '100%',
       minHeight: 280,
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16, minHeight: 90 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
         <div style={{ flex: 1, minHeight: 78 }}>
           <TicketIcon size={22} color={isActive ? B : '#94A3B8'} strokeWidth={1.8} style={{ marginBottom: 8 }} />
           <div style={{ fontWeight: 800, fontSize: 15, color: '#1E293B', marginBottom: 4 }}>
