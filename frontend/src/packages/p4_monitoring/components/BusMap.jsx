@@ -69,10 +69,17 @@ export default function BusMap({ buses = [], activeLines, onSelectBus }) {
       const color = getLineColor(route.short_name)
 
       if (route.shape && route.shape.length > 1) {
+        const outline = L.polyline(route.shape, {
+          color: '#ffffff',
+          weight: isSingleLine ? 8 : 6,
+          opacity: 0.9,
+        }).addTo(map)
+        layersRef.current.routes.push(outline)
+
         const polyline = L.polyline(route.shape, {
           color,
-          weight: isSingleLine ? 4 : 2,
-          opacity: isSingleLine ? 0.9 : 0.45,
+          weight: isSingleLine ? 5 : 4,
+          opacity: 0.95,
         }).addTo(map)
         polyline.bindTooltip(`Linha ${route.short_name}: ${route.long_name}`, { sticky: true })
         layersRef.current.routes.push(polyline)
@@ -118,8 +125,24 @@ export default function BusMap({ buses = [], activeLines, onSelectBus }) {
       const occColor = pct > 80 ? '#e74c3c' : pct > 50 ? '#f39c12' : '#2ecc71'
 
       const icon = L.divIcon({
-        html: `<div style="background:${color};border:2px solid white;border-radius:6px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.4);font-size:10px;font-weight:bold;color:white;">${bus.line}</div>`,
-        iconSize: [32, 32], iconAnchor: [16, 16], className: '',
+        html: `
+          <div style="
+            background: ${color};
+            border: 3px solid white;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+            font-size: 13px;
+            font-weight: 800;
+            color: white;
+            font-family: 'DM Sans', sans-serif;
+          ">${bus.line}</div>
+        `,
+        iconSize: [38, 38], iconAnchor: [19, 19], className: '',
       })
 
       const marker = L.marker([lat, lng], { icon }).addTo(map)

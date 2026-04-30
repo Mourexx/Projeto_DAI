@@ -4,14 +4,17 @@
 // UC6.2 – Detetar Anomalias de Procura
 // UC6.3 – Detetar Falhas de Leitura / Ausência de Dados
 import { useState, useEffect } from 'react'
-import { statsApi } from '../../shared/services/api'
+import { statsApi, linhasApi } from '../../shared/services/api'
 
-function AlertCard({ type, title, description, severity, timestamp, linha }) {
+function AlertCard({ type, title, description, severity, timestamp, linha, linhas = [] }) {
   const cfg = {
     critical: { bg: '#FEF2F2', border: '#FECACA', dot: '#DC2626', badge: '#DC2626', label: 'Crítico', icon: '🔴' },
     warning:  { bg: '#FFFBEB', border: '#FDE68A', dot: '#F59E0B', badge: '#F59E0B', label: 'Atenção', icon: '🟡' },
     info:     { bg: '#EFF6FF', border: '#BFDBFE', dot: '#3B82F6', badge: '#3B82F6', label: 'Info',    icon: '🔵' },
   }[severity] || { bg: '#F9FAFB', border: '#E5E7EB', dot: '#9CA3AF', badge: '#9CA3AF', label: 'Normal', icon: '⚪' }
+
+  const linhaInfo = linha ? linhas.find(l => String(l.codigo) === String(linha)) : null
+  const linhaLabel = linhaInfo ? `Linha ${linhaInfo.codigo} — ${linhaInfo.nome}` : (linha ? `Linha ${linha}` : null)
 
   return (
     <div style={{
@@ -20,18 +23,30 @@ function AlertCard({ type, title, description, severity, timestamp, linha }) {
       display: 'flex', gap: 14, alignItems: 'flex-start',
     }}>
       <div style={{ fontSize: 20, flexShrink: 0, marginTop: 2 }}>{cfg.icon}</div>
-      <div style={{ flex: 1 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
-          <div>
-            <span style={{ fontWeight: 700, fontSize: 14, color: '#1A1A1A' }}>{title}</span>
-            {linha && <span style={{ marginLeft: 8, fontSize: 11, background: '#1A1A1A', color: 'white', padding: '2px 7px', borderRadius: 4, fontWeight: 600 }}>Linha {linha}</span>}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4, gap: 10 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            {linhaLabel && (
+              <div style={{ fontSize: 14, fontWeight: 800, color: '#1A1A1A', marginBottom: 2 }}>
+                {linhaLabel}
+              </div>
+            )}
+            <div style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>
+              {title}
+            </div>
           </div>
-          <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 10px', borderRadius: 20, background: cfg.badge, color: 'white', textTransform: 'uppercase', letterSpacing: 0.4 }}>
-            {cfg.label}
-          </span>
+          <span style={{
+            background: cfg.badge, color: 'white',
+            padding: '3px 10px', borderRadius: 6,
+            fontSize: 10, fontWeight: 800, letterSpacing: 0.5,
+            textTransform: 'uppercase', flexShrink: 0,
+          }}>{cfg.label}</span>
         </div>
-        <p style={{ fontSize: 13, color: '#4B5563', margin: 0 }}>{description}</p>
-        {timestamp && <p style={{ fontSize: 11, color: '#9CA3AF', margin: '6px 0 0' }}>🕐 {timestamp}</p>}
+        <p style={{ fontSize: 13, color: '#6B7280', margin: '4px 0 8px' }}>{description}</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#9CA3AF' }}>
+          <span>🕐</span>
+          <span>{timestamp}</span>
+        </div>
       </div>
     </div>
   )
@@ -41,6 +56,7 @@ export default function Alerts() {
   const [alertData, setAlertData] = useState(null)
   const [loading, setLoading]     = useState(true)
   const [filter, setFilter]       = useState('all')
+  const [linhasDisponiveis, setLinhasDisponiveis] = useState([])
 
   const now = new Date().toLocaleString('pt-PT', {
     hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit'
@@ -56,8 +72,12 @@ export default function Alerts() {
 
   useEffect(() => {
     load()
-    const id = setInterval(load, 15000)   // atualiza a cada 15s
+    const id = setInterval(load, 15000)
     return () => clearInterval(id)
+  }, [])
+
+  useEffect(() => {
+    linhasApi.list().then(r => setLinhasDisponiveis(r.data)).catch(() => {})
   }, [])
 
   // Map backend alerts to display format
@@ -155,7 +175,7 @@ export default function Alerts() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {filtered.map((a, i) => <AlertCard key={i} {...a} />)}
+            {filtered.map((a, i) => <AlertCard key={i} {...a} linhas={linhasDisponiveis} />)}
           </div>
         )}
       </div>

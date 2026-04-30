@@ -151,17 +151,18 @@ export default function Transports() {
                 const color = pct >= 85 ? '#EF4444' : pct >= 65 ? '#F59E0B' : '#10B981'
                 return (
                   <div key={t.id} style={{ background: 'white', borderRadius: 12, border: '1px solid #E2E8F0', padding: '18px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
-                      <div>
-                        <div style={{ fontWeight: 800, fontSize: 15, color: '#1A1A1A' }}>{t.name}</div>
-                        <div style={{ fontSize: 12, color: '#9CA3AF', marginTop: 2 }}>{TYPE_LABEL[t.type]}</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10, gap: 10 }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: '#9CA3AF', letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 2 }}>
+                          {t.name} · {TYPE_LABEL[t.type] || 'Autocarro'}
+                        </div>
+                        <div style={{ fontSize: 14, fontWeight: 800, color: '#1A1A1A', lineHeight: 1.3 }}>
+                          {(() => {
+                            const l = linhasDisponiveis.find(l => String(l.codigo) === String(t.line))
+                            return l ? `Linha ${l.codigo} — ${l.nome}` : `Linha ${t.line}`
+                          })()}
+                        </div>
                       </div>
-                      <span style={{ background: '#EBF4FF', color: '#005BAC', fontSize: 11, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>
-                        {(() => {
-                          const l = linhasDisponiveis.find(l => String(l.codigo) === String(t.line))
-                          return l ? `${l.codigo} — ${l.nome}` : `Linha ${t.line}`
-                        })()}
-                      </span>
                     </div>
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
