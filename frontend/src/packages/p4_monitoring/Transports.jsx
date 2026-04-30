@@ -37,7 +37,7 @@ export default function Transports() {
     e.preventDefault()
     setSaving(true); setMsg(null)
     try {
-      await transportsApi.create({ ...form, capacity: parseInt(form.capacity) })
+      await transportsApi.create({ ...form, capacity: parseInt(form.capacity), line: String(form.line) })
       setMsg({ type: 'success', text: 'Transporte adicionado!' })
       setTab('lista')
       setForm({ name: '', type: 'bus', line: '', capacity: 50 })
@@ -158,7 +158,7 @@ export default function Transports() {
                       </div>
                       <span style={{ background: '#EBF4FF', color: '#005BAC', fontSize: 11, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>
                         {(() => {
-                          const l = linhasDisponiveis.find(l => l.codigo === t.line)
+                          const l = linhasDisponiveis.find(l => String(l.codigo) === String(t.line))
                           return l ? `${l.codigo} — ${l.nome}` : `Linha ${t.line}`
                         })()}
                       </span>
