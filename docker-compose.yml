@@ -1,4 +1,4 @@
-name: sibcp
+name: Dai_Project
 services:
   db:
     image: postgres:15
