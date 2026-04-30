@@ -45,12 +45,12 @@ function TicketCard({ ticket, onValidar, validating }) {
       minHeight: 280,
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
-        <div style={{ flex: 1, minHeight: 78 }}>
+        <div style={{ flex: 1, height: 90, overflow: 'hidden' }}>
           <TicketIcon size={22} color={isActive ? B : '#94A3B8'} strokeWidth={1.8} style={{ marginBottom: 8 }} />
-          <div style={{ fontWeight: 800, fontSize: 15, color: '#1E293B', marginBottom: 4 }}>
+          <div style={{ fontWeight: 800, fontSize: 15, color: '#1E293B', marginBottom: 4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {tipo.label || ticket.type}
           </div>
-          <div style={{ fontSize: 12, color: '#94A3B8', lineHeight: 1.4 }}>
+          <div style={{ fontSize: 12, color: '#94A3B8', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {tipo.descricao}
           </div>
         </div>
