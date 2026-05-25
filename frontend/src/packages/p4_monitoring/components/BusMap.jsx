@@ -128,26 +128,47 @@ export default function BusMap({ buses = [], activeLines, onSelectBus }) {
       const pct = cap > 0 ? Math.round((occ / cap) * 100) : 0
       const occColor = pct > 80 ? '#e74c3c' : pct > 50 ? '#f39c12' : '#2ecc71'
 
+      const heading = bus.heading ?? 0
       const icon = L.divIcon({
         html: `
           <div style="
-            background: ${color};
-            border: 3px solid white;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.45);
-            font-size: 12px;
-            font-weight: 800;
-            color: white;
-            font-family: 'DM Sans', sans-serif;
-            letter-spacing: -0.3px;
-          ">${bus.line}</div>
+            position: relative;
+            width: 44px;
+            height: 44px;
+            transform: rotate(${heading}deg);
+            transform-origin: 22px 22px;
+          ">
+            <div style="
+              position: absolute;
+              top: 4px; left: 4px;
+              background: ${color};
+              border: 3px solid white;
+              border-radius: 50%;
+              width: 36px;
+              height: 36px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-shadow: 0 3px 10px rgba(0,0,0,0.45);
+              font-size: 12px;
+              font-weight: 800;
+              color: white;
+              font-family: 'DM Sans', sans-serif;
+              letter-spacing: -0.3px;
+              transform: rotate(${-heading}deg);
+            ">${bus.line}</div>
+            <div style="
+              position: absolute;
+              top: 0; left: 50%;
+              transform: translateX(-50%);
+              width: 0; height: 0;
+              border-left: 5px solid transparent;
+              border-right: 5px solid transparent;
+              border-bottom: 8px solid ${color};
+            "></div>
+          </div>
         `,
-        iconSize: [36, 36], iconAnchor: [18, 18], className: '',
+        iconSize: [44, 44], iconAnchor: [22, 22], className: '',
       })
 
       const marker = L.marker([lat, lng], { icon }).addTo(map)

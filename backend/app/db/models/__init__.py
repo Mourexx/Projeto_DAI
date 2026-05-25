@@ -11,3 +11,4 @@ from app.packages.p7_devices.device import Device
 from app.packages.p7_devices.device_status import DeviceStatus
 from app.packages.p7_devices.fault import FaultRecord
 from app.packages.p8_export.export_artifact import ExportArtifact
+from app.packages.p6_alerts.alert import SystemAlert
