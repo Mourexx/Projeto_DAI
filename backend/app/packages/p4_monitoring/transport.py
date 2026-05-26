@@ -1,5 +1,3 @@
-# Package {P4} Monitoring — 4SRS SIBCP v3
-# Implements: {O4.2.d} real-time vehicle data, {O4.6.d} transport registry data
 import enum
 from sqlalchemy import Column, Integer, String, Float, Boolean, Enum
 from sqlalchemy.orm import relationship

@@ -1,5 +1,3 @@
-# Package {P2} Ticketing — 4SRS SIBCP v3
-# Implements: {O2.1.d} ticket repository
 import enum
 from sqlalchemy import Column, Integer, Float, DateTime, ForeignKey, Enum
 from sqlalchemy.sql import func

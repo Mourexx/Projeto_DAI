@@ -47,7 +47,7 @@ function AlertRow({ linha, name, descricao, estado }) {
         <div style={{ fontSize: 12, color: '#64748B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{descricao}</div>
       </div>
       <span style={{ fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 20, background: estado === 'critical' ? R : '#F59E0B', color: 'white', textTransform: 'uppercase', flexShrink: 0 }}>
-        {estado === 'critical' ? 'Critico' : 'Atencao'}
+        {estado === 'critical' ? 'Crítico' : 'Atenção'}
       </span>
     </div>
   )
@@ -70,7 +70,7 @@ export default function Dashboard() {
         setOccupancy(occRes.data)
         setAlerts(occRes.data.filter(t => t.occupancy_pct >= 75).map(t => ({
           linha: t.line, name: t.name,
-          descricao: `Ocupacao de ${t.occupancy_pct}% (${t.current_occupancy}/${t.capacity} passageiros)`,
+          descricao: `Ocupação de ${t.occupancy_pct}% (${t.current_occupancy}/${t.capacity} passageiros)`,
           estado: t.occupancy_pct >= 90 ? 'critical' : 'warning',
         })))
       })
@@ -117,7 +117,7 @@ export default function Dashboard() {
         : <>
           <KPI title="Total de Bilhetes" value={stats?.total_tickets ?? '—'} sub={`${stats?.active_tickets ?? 0} ativos`} Icon={Ticket} accent={B} />
           <KPI title="Receita Total" value={`${(stats?.total_revenue ?? 0).toFixed(2)} €`} sub="Acumulado" Icon={TrendingUp} accent="#10B981" />
-          <KPI title="Transportes Ativos" value={stats?.active_transports ?? '—'} sub="Em operacao" Icon={Bus} accent="#F59E0B" />
+          <KPI title="Transportes Ativos" value={stats?.active_transports ?? '—'} sub="Em operação" Icon={Bus} accent="#F59E0B" />
           <KPI title="Viagens em Curso" value={stats?.viagens_em_curso ?? '—'} sub="Neste momento" Icon={Activity} accent="#8B5CF6" />
         </>}
       </div>
@@ -137,7 +137,7 @@ export default function Dashboard() {
                 <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#F0FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 8px' }}>
                   <Activity size={18} color="#10B981" />
                 </div>
-                Operacao normal — sem alertas
+                Operação normal — sem alertas
               </div>
             : alerts.slice(0, 4).map((a, i) => <AlertRow key={i} {...a} />)
           }
@@ -147,7 +147,7 @@ export default function Dashboard() {
         <div style={{ background: 'white', borderRadius: 14, border: '1px solid #E2E8F0', padding: '20px 22px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Bus size={16} color={B} /> Ocupacao da Frota
+              <Bus size={16} color={B} /> Ocupação da Frota
             </h3>
             <Link to="/transports" style={{ fontSize: 12, color: B, fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 2 }}>Ver todos <ChevronRight size={13} /></Link>
           </div>
@@ -177,13 +177,13 @@ export default function Dashboard() {
 
       {/* Acesso Rapido */}
       <div style={{ background: 'white', borderRadius: 14, border: '1px solid #E2E8F0', padding: '20px 22px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-        <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1E293B', margin: '0 0 16px' }}>Acesso Rapido</h3>
+        <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1E293B', margin: '0 0 16px' }}>Acesso Rápido</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
           {[
-            { to: '/tickets', Icon: Ticket, label: 'Comprar Bilhete', sub: 'Adquirir titulo de transporte', color: B },
-            { to: '/map', Icon: MapPin, label: 'Mapa em Tempo Real', sub: 'Ver localizacao dos veiculos', color: '#10B981' },
-            { to: '/analytics', Icon: TrendingUp, label: 'Analise de Dados', sub: 'Dashboards e estatisticas', color: '#8B5CF6' },
-            { to: '/transports', Icon: Bus, label: 'Gestao da Frota', sub: 'Gerir transportes ativos', color: '#F59E0B' },
+            { to: '/tickets', Icon: Ticket, label: 'Comprar Bilhete', sub: 'Adquirir título de transporte', color: B },
+            { to: '/map', Icon: MapPin, label: 'Mapa em Tempo Real', sub: 'Ver localização dos veículos', color: '#10B981' },
+            { to: '/analytics', Icon: TrendingUp, label: 'Análise de Dados', sub: 'Dashboards e estatísticas', color: '#8B5CF6' },
+            { to: '/transports', Icon: Bus, label: 'Gestão da Frota', sub: 'Gerir transportes ativos', color: '#F59E0B' },
           ].map(({ to, Icon, label, sub, color }) => (
             <Link key={to} to={to} style={{ textDecoration: 'none' }}>
               <div style={{ padding: '18px 16px', borderRadius: 12, border: '1px solid #F1F5F9', cursor: 'pointer', transition: 'all 0.2s' }}

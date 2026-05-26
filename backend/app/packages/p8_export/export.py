@@ -1,7 +1,3 @@
-# Package {P8} Data Export & Normalization — 4SRS SIBCP v3
-# Implements: {O8.1.c} data export controller,
-#             {O8.2.c} report generation controller,
-#             {O8.3.c} data normalization controller
 import csv
 import io
 import json
@@ -17,7 +13,6 @@ from app.packages.p2_ticketing.validacao import ValidacaoBilhete
 from app.packages.p8_export.export_artifact import ExportArtifact, ArtifactTipo, ArtifactEstado
 
 router = APIRouter()
-
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -37,7 +32,6 @@ def _save_artifact(db: Session, tipo: ArtifactTipo, filtros: dict | None,
     db.refresh(artifact)
     return artifact
 
-
 def _csv_response(rows: list, headers: list, filename: str) -> tuple[str, Response]:
     output = io.StringIO()
     writer = csv.writer(output)
@@ -51,7 +45,6 @@ def _csv_response(rows: list, headers: list, filename: str) -> tuple[str, Respon
     )
     return content, resp
 
-
 def _json_file_response(data: list | dict, filename: str) -> tuple[str, Response]:
     content = json.dumps(data, ensure_ascii=False, indent=2)
     resp = Response(
@@ -60,7 +53,6 @@ def _json_file_response(data: list | dict, filename: str) -> tuple[str, Response
         headers={"Content-Disposition": f"attachment; filename={filename}"},
     )
     return content, resp
-
 
 # ── {O8.1.c} Raw data export ──────────────────────────────────────────────────
 

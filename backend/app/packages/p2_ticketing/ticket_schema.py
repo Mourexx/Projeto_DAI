@@ -1,5 +1,3 @@
-# Package {P2} Ticketing — 4SRS SIBCP v3
-# Implements: {O2.1.d} ticket repository (schema)
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import Optional

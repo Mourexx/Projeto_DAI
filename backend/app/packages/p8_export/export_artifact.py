@@ -1,5 +1,3 @@
-# Package {P8} Data Export & Normalization — 4SRS SIBCP v3
-# Implements: {O8.1.d} export artifact data (also serves {O8.2.d} kill, {O8.3.d} kill)
 import enum
 from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, Text, Enum, DateTime

@@ -1,4 +1,3 @@
-// Package {P4} Fleet Monitoring — 4SRS SIBCP v3
 export default function StatusBar({ dataSource, lastUpdate, totalBuses, error }) {
   const isLive    = dataSource === 'api'
   const isMock    = dataSource === 'mock'

@@ -1,13 +1,3 @@
-# Package {P5} Analytics — 4SRS SIBCP v3
-# Implements: {O5.1.c} KPI calculation controller, {O5.2.c} dashboard composition controller,
-#             {O5.3.c} occupancy analysis controller, {O5.4.c} validation analysis controller,
-#             {O5.5.c} historical query controller
-# UC5 – Analisar Dados e Estatísticas
-# UC5.1 – Visualizar KPIs
-# UC5.2 – Visualizar Dashboard Analítico
-# UC5.3 – Analisar Ocupação dos Veículos
-# UC5.4 – Analisar Validações e Bilhetes
-# UC5.5 – Analisar Histórico de Dados
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -20,7 +10,6 @@ from app.packages.p1_user_management.user import User
 from app.core.security import get_current_user
 
 router = APIRouter()
-
 
 # UC5.1 – KPIs gerais
 @router.get("/overview")
@@ -39,13 +28,11 @@ def get_overview(db: Session = Depends(get_db), _: User = Depends(get_current_us
         "viagens_em_curso": viagens_em_curso,
     }
 
-
 # UC5.4 – Análise de bilhetes por tipo
 @router.get("/tickets-by-type")
 def tickets_by_type(db: Session = Depends(get_db), _: User = Depends(get_current_user)):
     results = db.query(Ticket.type, func.count(Ticket.id)).group_by(Ticket.type).all()
     return [{"type": r[0], "count": r[1]} for r in results]
-
 
 # UC5.3 – Ocupação dos veículos
 @router.get("/occupancy")
@@ -63,7 +50,6 @@ def transport_occupancy(db: Session = Depends(get_db), _: User = Depends(get_cur
         }
         for t in transports
     ]
-
 
 # UC5.5 – Histórico e análise de viagens
 @router.get("/viagens")

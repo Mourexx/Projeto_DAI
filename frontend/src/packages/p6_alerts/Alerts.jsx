@@ -120,9 +120,6 @@ export default function Alerts() {
           <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A1A1A', margin: '0 0 4px', letterSpacing: -0.3 }}>
             Sistema de Alertas
           </h1>
-          <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>
-            UC6 · Deteção automática de sobrelotação, anomalias e falhas de leitura
-          </p>
         </div>
         <button onClick={load} style={{
           padding: '8px 14px', borderRadius: 8, border: '1px solid #E2E8F0',

@@ -1,6 +1,3 @@
-# Package {P1} User Management — 4SRS SIBCP v3
-# Implements: {O1.1.c} registration validator, {O1.2.c} session management controller,
-#             {O1.3.c} profile management controller, {O1.4.c} permission management controller
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -79,7 +76,7 @@ def update_me(
     return current_user
 
 
-# ── Rotas de administrador ──────────────────────────────────────────
+# ── Rotas de administrador ──────────────────
 
 @router.get("/", response_model=List[UserOut])
 def list_users(db: Session = Depends(get_db), _=Depends(get_current_admin)):

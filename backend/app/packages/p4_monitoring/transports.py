@@ -1,6 +1,3 @@
-# Package {P4} Monitoring — 4SRS SIBCP v3
-# Implements: {O4.2.c} real-time location controller, {O4.3.c} occupancy calculation controller,
-#             {O4.6.c} transport fleet management controller
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session

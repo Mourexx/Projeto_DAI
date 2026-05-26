@@ -1,5 +1,3 @@
-# Package {P4} Monitoring — 4SRS SIBCP v3
-# Implements: {O4.4.d} line repository
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 from app.db.database import Base

@@ -17,7 +17,7 @@ function Badge({ estado }) {
     inativo:      { bg: '#F3F4F6', color: '#6B7280', label: 'Inativo' },
     falha:        { bg: '#FEE2E2', color: '#DC2626', label: 'Falha' },
     aberto:       { bg: '#FEF3C7', color: '#B45309', label: 'Aberto' },
-    em_resolucao: { bg: '#DBEAFE', color: '#1D4ED8', label: 'Em Resolucao' },
+    em_resolucao: { bg: '#DBEAFE', color: '#1D4ED8', label: 'Em Resolução' },
     resolvido:    { bg: '#DCFCE7', color: '#15803D', label: 'Resolvido' },
   }
   const cfg = map[estado] || { bg: '#F3F4F6', color: '#6B7280', label: estado }
@@ -31,9 +31,9 @@ function Badge({ estado }) {
 function timeAgo(isoStr) {
   if (!isoStr) return 'Nunca'
   const diff = Math.floor((Date.now() - new Date(isoStr).getTime()) / 1000)
-  if (diff < 60) return `ha ${diff}s`
-  if (diff < 3600) return `ha ${Math.floor(diff / 60)}min`
-  return `ha ${Math.floor(diff / 3600)}h`
+  if (diff < 60) return `há ${diff}s`
+  if (diff < 3600) return `há ${Math.floor(diff / 60)}min`
+  return `há ${Math.floor(diff / 3600)}h`
 }
 
 const inputStyle = {
@@ -61,7 +61,7 @@ const btnSecondary = {
 const TABS = [
   { id: 'dispositivos', label: 'Dispositivos' },
   { id: 'status',       label: 'Estado em Tempo Real' },
-  { id: 'falhas',       label: 'Falhas e Inventario' },
+  { id: 'falhas',       label: 'Falhas e Inventário' },
 ]
 
 const EMPTY_DEVICE_FORM = { device_id: '', tipo: 'sensor_contagem', fabricante: '', numero_serie: '', veiculo_id: '' }
@@ -171,9 +171,6 @@ export default function Devices() {
         <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A1A1A', margin: '0 0 4px', letterSpacing: -0.3 }}>
           Dispositivos e Infraestrutura
         </h1>
-        <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>
-          P7 · Gestao de dispositivos IoT, monitorizacao e registo de falhas
-        </p>
       </div>
 
       {/* KPIs */}
@@ -230,7 +227,7 @@ export default function Devices() {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
                   <tr style={{ borderBottom: '2px solid #F1F5F9' }}>
-                    {['ID Dispositivo', 'Tipo', 'Fabricante', 'Veiculo', 'Estado', 'Data Registo', 'Acoes'].map(h => (
+                    {['ID Dispositivo', 'Tipo', 'Fabricante', 'Veículo', 'Estado', 'Data Registo', 'Ações'].map(h => (
                       <th key={h} style={thStyle}>{h}</th>
                     ))}
                   </tr>
@@ -285,7 +282,7 @@ export default function Devices() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
               {statuses.length === 0 ? (
                 <div style={{ background: 'white', borderRadius: 12, border: '1px solid #E2E8F0', padding: 40, textAlign: 'center', color: '#9CA3AF', gridColumn: '1 / -1' }}>
-                  Sem dados de estado disponiveis
+                  Sem dados de estado disponíveis
                 </div>
               ) : statuses.map(s => (
                 <div key={s.device_id} style={{ background: 'white', borderRadius: 12, border: '1px solid #E2E8F0', padding: '18px 20px' }}>
@@ -294,10 +291,10 @@ export default function Devices() {
                     <Badge estado={s.estado_atual} />
                   </div>
                   <div style={{ fontSize: 12, color: '#64748B', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <div>Ultimo heartbeat: <strong>{timeAgo(s.ultimo_heartbeat)}</strong></div>
+                    <div>Último heartbeat: <strong>{timeAgo(s.ultimo_heartbeat)}</strong></div>
                     <div>Uptime: <strong>{s.uptime_percentagem != null ? s.uptime_percentagem.toFixed(1) + '%' : 'N/A'}</strong></div>
                     {s.latencia_media_ms != null && (
-                      <div>Latencia media: <strong>{s.latencia_media_ms.toFixed(0)} ms</strong></div>
+                      <div>Latência média: <strong>{s.latencia_media_ms.toFixed(0)} ms</strong></div>
                     )}
                   </div>
                 </div>
@@ -312,7 +309,7 @@ export default function Devices() {
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h3 style={{ fontSize: 15, fontWeight: 700, color: '#1A1A1A', margin: 0 }}>
-              Falhas e Inventario ({faults.length} abertas)
+              Falhas e Inventário ({faults.length} abertas)
             </h3>
             <button onClick={() => setShowFaultForm(v => !v)} style={{ ...btnSecondary, background: '#FEF3C7', borderColor: '#FDE68A', color: '#B45309' }}>
               Reportar Falha
@@ -337,7 +334,7 @@ export default function Devices() {
                 </div>
               </div>
               <div style={{ marginBottom: 14 }}>
-                <label style={labelStyle}>Descricao</label>
+                <label style={labelStyle}>Descrição</label>
                 <textarea value={faultForm.descricao} onChange={e => setFaultForm(f => ({ ...f, descricao: e.target.value }))}
                   rows={3} placeholder="Descrever a falha observada..."
                   style={{ ...inputStyle, resize: 'vertical' }} />
@@ -357,7 +354,7 @@ export default function Devices() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                   <thead>
                     <tr style={{ borderBottom: '2px solid #F1F5F9' }}>
-                      {['Dispositivo', 'Tipo Falha', 'Descricao', 'Estado', 'Criado em', 'Acao Corretiva', 'Reportado por', ...(user?.is_admin ? ['Acoes'] : [])].map(h => (
+                      {['Dispositivo', 'Tipo Falha', 'Descrição', 'Estado', 'Criado em', 'Ação Corretiva', 'Reportado por', ...(user?.is_admin ? ['Ações'] : [])].map(h => (
                         <th key={h} style={thStyle}>{h}</th>
                       ))}
                     </tr>
@@ -424,14 +421,14 @@ export default function Devices() {
                   placeholder="Ex: Wayfair" style={inputStyle} />
               </div>
               <div>
-                <label style={labelStyle}>Numero de Serie *</label>
+                <label style={labelStyle}>Número de Série *</label>
                 <input value={modalForm.numero_serie} onChange={e => setModalForm(f => ({ ...f, numero_serie: e.target.value }))}
                   placeholder="SN-00000" style={inputStyle} />
               </div>
               <div style={{ gridColumn: '1 / -1' }}>
-                <label style={labelStyle}>Veiculo (opcional)</label>
+                <label style={labelStyle}>Veículo (opcional)</label>
                 <select value={modalForm.veiculo_id} onChange={e => setModalForm(f => ({ ...f, veiculo_id: e.target.value }))} style={inputStyle}>
-                  <option value="">Sem associacao</option>
+                  <option value="">Sem associação</option>
                   {vehicles.map(v => <option key={v} value={v}>{v}</option>)}
                 </select>
               </div>

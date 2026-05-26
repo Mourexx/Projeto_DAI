@@ -1,9 +1,3 @@
-# Package {P6} Alerts — 4SRS SIBCP v3
-# Implements: {O6.1.c} overcrowding detection controller,
-#             {O6.2.c} demand anomaly detection controller,
-#             {O6.3.c} sensor failure detection controller,
-#             {O6.4.c} notification controller (Observer pattern + persistência),
-#             {O6.1.d} system alert data
 from datetime import datetime, timezone, timedelta
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
@@ -19,7 +13,6 @@ from app.packages.p6_alerts.alert import SystemAlert, AlertType, AlertSeverity
 router = APIRouter()
 
 _DEDUP_WINDOW = timedelta(minutes=5)
-
 
 def _persist_and_dispatch(db: Session, alert_dict: dict) -> SystemAlert:
     """UC6.4 — {O6.4.c} notification controller: persiste e despacha alerta.

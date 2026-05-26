@@ -57,9 +57,6 @@ export default function AdminUsers() {
         <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A1A1A', margin: '0 0 4px', letterSpacing: -0.3 }}>
           Gestão de Utilizadores
         </h1>
-        <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>
-          UC1.4 · Gerir permissões e contas — apenas administradores
-        </p>
       </div>
 
       {/* Stats */}

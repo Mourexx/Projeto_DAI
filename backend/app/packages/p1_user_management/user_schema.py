@@ -1,5 +1,3 @@
-# Package {P1} User Management — 4SRS SIBCP v3
-# Implements: {O1.1.d} user data (schema)
 from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 from typing import Optional

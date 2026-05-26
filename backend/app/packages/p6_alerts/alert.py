@@ -1,5 +1,3 @@
-# Package {P6} Alerts — 4SRS SIBCP v3
-# Implements: {O6.1.d} system alert data, {O6.4.c} notification controller
 import enum
 from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, Enum, DateTime, Boolean

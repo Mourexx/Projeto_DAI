@@ -10,7 +10,7 @@ const B = '#005BAC'
 
 const TABS = [
   { id: 'raw',        label: 'Dados Brutos' },
-  { id: 'report',     label: 'Relatorios' },
+  { id: 'report',     label: 'Relatórios' },
   { id: 'normalized', label: 'Dados Normalizados' },
 ]
 
@@ -145,17 +145,17 @@ export default function Export() {
     {
       id: 'tickets',
       title: 'Bilhetes',
-      desc: 'Exportar todos os bilhetes registados no sistema — inclui tipo, preco, estado, datas de compra e validade.',
+      desc: 'Exportar todos os bilhetes registados no sistema — inclui tipo, preço, estado, datas de compra e validade.',
     },
     {
       id: 'transports',
       title: 'Transportes',
-      desc: 'Exportar a frota de veiculos urbanos — inclui linha, capacidade, ocupacao atual e coordenadas GPS.',
+      desc: 'Exportar a frota de veículos urbanos — inclui linha, capacidade, ocupação atual e coordenadas GPS.',
     },
     {
       id: 'validacoes',
-      title: 'Validacoes',
-      desc: 'Exportar registos de validacao de titulos — dados anonimizados (RGPD) com paragem, perfil e tipo de titulo.',
+      title: 'Validações',
+      desc: 'Exportar registos de validação de títulos — dados anonimizados (RGPD) com paragem, perfil e tipo de título.',
     },
   ]
 
@@ -165,11 +165,8 @@ export default function Export() {
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A1A1A', margin: '0 0 4px', letterSpacing: -0.3 }}>
-          Exportacao de Dados
+          Exportação de Dados
         </h1>
-        <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>
-          P8 · Exportar dados brutos, relatorios e formatos normalizados GTFS / NGSI-LD
-        </p>
       </div>
 
       {/* Tabs */}
@@ -219,14 +216,14 @@ export default function Export() {
       {activeTab === 'report' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={cardStyle}>
-            <h3 style={{ fontSize: 16, fontWeight: 800, color: '#1A1A1A', margin: '0 0 8px' }}>Relatorio de Overview</h3>
+            <h3 style={{ fontSize: 16, fontWeight: 800, color: '#1A1A1A', margin: '0 0 8px' }}>Relatório de Overview</h3>
             <p style={{ fontSize: 13, color: '#64748B', margin: '0 0 20px', lineHeight: 1.5 }}>
-              Agrega KPIs principais, distribuicao de bilhetes por tipo e ocupacao atual dos veiculos.
-              O resultado e mostrado abaixo e pode ser descarregado em JSON.
+              Agrega KPIs principais, distribuição de bilhetes por tipo e ocupação atual dos veículos.
+              O resultado é mostrado abaixo e pode ser descarregado em JSON.
             </p>
             <div style={{ display: 'flex', gap: 8, marginBottom: report ? 20 : 0 }}>
               <button onClick={handleReportOverview} disabled={loading.report} style={btnPrimary(loading.report)}>
-                {loading.report ? 'A gerar...' : 'Gerar Relatorio'}
+                {loading.report ? 'A gerar...' : 'Gerar Relatório'}
               </button>
               {report && (
                 <button onClick={() => triggerJsonDownload(report, 'relatorio_overview.json')} style={btnOutline}>
@@ -236,7 +233,7 @@ export default function Export() {
             </div>
 
             {reportError && (
-              <p style={{ color: '#DC2626', fontSize: 13 }}>Erro ao gerar relatorio. Tente novamente.</p>
+              <p style={{ color: '#DC2626', fontSize: 13 }}>Erro ao gerar relatório. Tente novamente.</p>
             )}
 
             {report && (
@@ -269,12 +266,12 @@ export default function Export() {
 
                 {/* Ocupacao section */}
                 <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 10 }}>Ocupacao dos Veiculos</div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 10 }}>Ocupação dos Veículos</div>
                   <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                       <thead>
                         <tr style={{ borderBottom: '2px solid #F1F5F9' }}>
-                          {['Veiculo', 'Linha', 'Ocupacao', 'Capacidade', '%'].map(h => (
+                          {['Veículo', 'Linha', 'Ocupação', 'Capacidade', '%'].map(h => (
                             <th key={h} style={{ textAlign: 'left', padding: '8px 10px', fontWeight: 700, color: '#475569', fontSize: 11, textTransform: 'uppercase' }}>{h}</th>
                           ))}
                         </tr>
@@ -311,14 +308,14 @@ export default function Export() {
           {/* Export History */}
           <div style={cardStyle}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-              <h3 style={{ fontSize: 15, fontWeight: 700, color: '#1A1A1A', margin: 0 }}>Historico de Exportacoes</h3>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: '#1A1A1A', margin: 0 }}>Histórico de Exportações</h3>
               <button onClick={loadHistory} disabled={loading.history} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid #E2E8F0', background: 'white', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#64748B', fontFamily: "'DM Sans', sans-serif" }}>
-                {loading.history ? 'A carregar...' : 'Carregar Historico'}
+                {loading.history ? 'A carregar...' : 'Carregar Histórico'}
               </button>
             </div>
             {historyLoaded && (
               history.length === 0 ? (
-                <p style={{ color: '#9CA3AF', fontSize: 13, textAlign: 'center', padding: '20px 0' }}>Sem exportacoes registadas.</p>
+                <p style={{ color: '#9CA3AF', fontSize: 13, textAlign: 'center', padding: '20px 0' }}>Sem exportações registadas.</p>
               ) : (
                 <div style={{ overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
@@ -367,10 +364,10 @@ export default function Export() {
             </div>
             <p style={{ fontSize: 13, color: '#64748B', margin: '0 0 10px', lineHeight: 1.5 }}>
               General Transit Feed Specification — formato aberto para dados de transporte publico.
-              Exporta a frota com campos normalizados: trip_id, vehicle_id, route_id, coordenadas e ocupacao.
+              Exporta a frota com campos normalizados: trip_id, vehicle_id, route_id, coordenadas e ocupação.
             </p>
             <p style={{ fontSize: 11, color: '#94A3B8', margin: '0 0 18px' }}>
-              Compativel com Google Maps, OpenTripPlanner e outras plataformas de mobilidade.
+              Compatível com Google Maps, OpenTripPlanner e outras plataformas de mobilidade.
             </p>
             <button onClick={handleGtfsDownload} disabled={loading.gtfs} style={btnPrimary(loading.gtfs)}>
               {loading.gtfs ? 'A exportar...' : 'Exportar GTFS (CSV)'}
@@ -387,10 +384,10 @@ export default function Export() {
             </div>
             <p style={{ fontSize: 13, color: '#64748B', margin: '0 0 10px', lineHeight: 1.5 }}>
               Next Generation Service Interfaces — Linked Data (NGSI-LD). Formato da ETSI para sistemas
-              de cidades inteligentes. Mapeia cada veiculo para entidade Vehicle com GeoProperty e Properties.
+              de cidades inteligentes. Mapeia cada veículo para entidade Vehicle com GeoProperty e Properties.
             </p>
             <p style={{ fontSize: 11, color: '#94A3B8', margin: '0 0 18px' }}>
-              Compativel com FIWARE Orion-LD e outras plataformas de Smart Cities baseadas em NGSI-LD.
+              Compatível com FIWARE Orion-LD e outras plataformas de Smart Cities baseadas em NGSI-LD.
             </p>
             <button onClick={handleNgsiDownload} disabled={loading.ngsi} style={btnPrimary(loading.ngsi)}>
               {loading.ngsi ? 'A exportar...' : 'Exportar NGSI-LD (JSON-LD)'}

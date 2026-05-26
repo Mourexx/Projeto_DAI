@@ -1,5 +1,3 @@
-// Package {P4} Fleet Monitoring — 4SRS SIBCP v3
-// Implements: {O4.2.c} bus info panel
 export default function BusInfoPanel({ bus, onClose }) {
   if (!bus) return null
 

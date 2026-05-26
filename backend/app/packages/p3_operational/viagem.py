@@ -1,5 +1,3 @@
-# Package {P3} Operational — 4SRS SIBCP v3
-# Implements: {O3.4.d} operational data store
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Float, Boolean
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship

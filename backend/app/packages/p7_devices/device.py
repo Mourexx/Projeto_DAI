@@ -1,5 +1,3 @@
-# Package {P7} Device & Infrastructure Management — 4SRS SIBCP v3
-# Implements: {O7.1.d} device registry data
 import enum
 from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, Enum, DateTime

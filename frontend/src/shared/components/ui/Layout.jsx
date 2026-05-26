@@ -16,23 +16,23 @@ export default function Layout({ children }) {
       label: 'Principal',
       items: [
         { path: '/',           label: 'Dashboard',         icon: LayoutDashboard },
-        { path: '/analytics',  label: 'Analise',           icon: BarChart2 },
+        { path: '/analytics',  label: 'Análise',           icon: BarChart2 },
         { path: '/alerts',     label: 'Alertas',           icon: Bell },
       ]
     },
     {
-      label: 'Operacao',
+      label: 'Operação',
       items: [
         { path: '/map',        label: 'Mapa em Tempo Real', icon: Map },
         { path: '/transports', label: 'Transportes',        icon: Bus },
         ...(user?.is_admin ? [
           { path: '/devices', label: 'Dispositivos', icon: Server },
-          { path: '/export',  label: 'Exportacao',   icon: Download },
+          { path: '/export',  label: 'Exportação',   icon: Download },
         ] : []),
       ]
     },
     {
-      label: 'Bilhetica',
+      label: 'Bilhética',
       items: [
         { path: '/tickets',    label: 'Bilhetes',           icon: Ticket },
         ...(user?.is_admin ? [{ path: '/admin/users', label: 'Utilizadores', icon: Users }] : []),
@@ -49,7 +49,7 @@ export default function Layout({ children }) {
         {/* Logo */}
         <div style={{ padding: '18px 20px 14px', borderBottom: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', gap: 12 }}>
           <img src={tubLogo} alt="TUB" style={{ width: 110, height: 44, objectFit: 'contain' }} />
-          <div style={{ fontSize: 10, color: '#94A3B8', fontWeight: 600, letterSpacing: 0.3 }}>Gestao Urbana</div>
+          <div style={{ fontSize: 10, color: '#94A3B8', fontWeight: 600, letterSpacing: 0.3 }}>Gestão Urbana</div>
         </div>
 
         {/* Nav groups */}
@@ -106,7 +106,7 @@ export default function Layout({ children }) {
             onMouseEnter={e => { e.currentTarget.style.background = '#FEF2F2'; e.currentTarget.style.color = '#DC2626' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = '#64748B' }}
           >
-            <LogOut size={15} /> Terminar Sessao
+            <LogOut size={15} /> Terminar Sessão
           </button>
         </div>
       </aside>

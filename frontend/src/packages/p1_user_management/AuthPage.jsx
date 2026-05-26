@@ -88,16 +88,16 @@ export default function AuthPage() {
               <img src={tubLogo} alt="TUB" style={{ height: 48, maxWidth: 160, objectFit: 'contain' }} />
             </div>
             <h1 style={{ fontSize: 20, fontWeight: 800, color: '#1E293B', margin: '0 0 4px', letterSpacing: -0.3 }}>
-              Plataforma de Gestao
+              Plataforma de Gestão
             </h1>
             <p style={{ fontSize: 12, color: '#94A3B8', margin: 0, letterSpacing: 0.5, textTransform: 'uppercase', fontWeight: 600 }}>
               Transportes Urbanos de Braga
             </p>
           </div>
-
+            
           {/* Tabs */}
           <div style={{ display: 'flex', background: '#F1F5F9', borderRadius: 10, padding: 4, marginBottom: 24 }}>
-            {[['login', 'Iniciar Sessao'], ['register', 'Criar Conta']].map(([m, label]) => (
+            {[['login', 'Iniciar Sessão'], ['register', 'Criar Conta']].map(([m, label]) => (
               <button key={m} onClick={() => { setMode(m); setError('') }} style={{
                 flex: 1, padding: '9px', borderRadius: 7, border: 'none',
                 background: mode === m ? B : 'transparent',

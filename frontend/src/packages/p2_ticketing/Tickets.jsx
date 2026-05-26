@@ -200,7 +200,7 @@ export default function Tickets() {
         : tickets.length === 0 ? (
           <div style={{ textAlign: 'center', padding: 60, background: 'white', borderRadius: 12, border: '1px solid #E2E8F0' }}>
             <TicketIcon size={40} color="#CBD5E1" strokeWidth={1.2} style={{ marginBottom: 12 }} />
-            <p style={{ color: '#64748B', fontWeight: 600, fontSize: 15, margin: '0 0 12px' }}>Ainda nao tens bilhetes.</p>
+            <p style={{ color: '#64748B', fontWeight: 600, fontSize: 15, margin: '0 0 12px' }}>Ainda não tem bilhetes.</p>
             <button onClick={() => setTab('comprar')} style={{ padding: '8px 18px', borderRadius: 8, border: 'none', cursor: 'pointer', background: B, color: 'white', fontWeight: 700, fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>
               Comprar o primeiro
             </button>
@@ -217,12 +217,12 @@ export default function Tickets() {
             )}
             {historico.length > 0 && (
               <div>
-                <h2 style={{ fontSize: 11, fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>Historico ({historico.length})</h2>
+                <h2 style={{ fontSize: 11, fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>Histórico ({historico.length})</h2>
                 <div style={{ background: 'white', borderRadius: 12, border: '1px solid #E2E8F0', overflow: 'hidden' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                     <thead>
                       <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #F1F5F9' }}>
-                        {['Tipo', 'Preco', 'Comprado em', 'Valido ate', 'Estado'].map(h => (
+                        {['Tipo', 'Preço', 'Comprado em', 'Válido até', 'Estado'].map(h => (
                           <th key={h} style={{ padding: '10px 20px', textAlign: 'left', fontSize: 11, fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 0.5 }}>{h}</th>
                         ))}
                       </tr>
@@ -282,7 +282,7 @@ export default function Tickets() {
               <div>
                 <label style={lbl}>Transporte <span style={{ color: '#94A3B8', fontWeight: 400 }}>(opcional)</span></label>
                 <select value={form.transport_id} onChange={e => setForm(f => ({ ...f, transport_id: e.target.value }))} style={{ ...inp }}>
-                  <option value="">Sem transporte especifico</option>
+                  <option value="">Sem transporte específico</option>
                   {transports.map(t => <option key={t.id} value={t.id}>{t.name} — Linha {t.line}</option>)}
                 </select>
               </div>

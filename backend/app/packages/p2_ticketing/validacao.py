@@ -1,11 +1,8 @@
-# Package {P2} Ticketing — 4SRS SIBCP v3
-# Implements: {O2.4.d} validation records
 import enum
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum, Boolean
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.db.database import Base
-
 
 class PerfilPassageiro(str, enum.Enum):
     normal = "normal"
@@ -14,13 +11,11 @@ class PerfilPassageiro(str, enum.Enum):
     crianca = "crianca"
     portador_deficiencia = "portador_deficiencia"
 
-
 class TipoTitulo(str, enum.Enum):
     passe_mensal = "passe_mensal"
     bilhete_simples = "bilhete_simples"
     bilhete_diario = "bilhete_diario"
     passe_estudante = "passe_estudante"
-
 
 class ValidacaoBilhete(Base):
     """

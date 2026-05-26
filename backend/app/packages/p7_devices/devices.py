@@ -1,7 +1,3 @@
-# Package {P7} Device & Infrastructure Management — 4SRS SIBCP v3
-# Implements: {O7.1.c} device registration controller,
-#             {O7.2.c} device heartbeat processor,
-#             {O7.3.c} fault management controller
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException

@@ -1,11 +1,3 @@
-// Package {P5} Analytics — 4SRS SIBCP v3
-// Implements: {O5.3.c} occupancy, {O5.4.c} tickets, {O5.5.c} trips
-// UC5 – Analisar Dados e Estatísticas
-// UC5.1 – Visualizar KPIs
-// UC5.2 – Visualizar Dashboard Analítico
-// UC5.3 – Analisar Ocupação dos Veículos
-// UC5.4 – Analisar Validações e Bilhetes
-// UC5.5 – Analisar Histórico de Dados
 import { useState, useEffect } from 'react'
 import { statsApi } from '../../shared/services/api'
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
@@ -103,9 +95,6 @@ export default function Analytics() {
         <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A1A1A', margin: '0 0 4px', letterSpacing: -0.3 }}>
           Análise de Dados
         </h1>
-        <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>
-          Dashboard analítico — UC5 · Estatísticas, KPIs e histórico
-        </p>
       </div>
 
       {/* Tabs */}

@@ -1,5 +1,3 @@
-# Package {P7} Device & Infrastructure Management — 4SRS SIBCP v3
-# Implements: {O7.2.d} device status data
 import enum
 from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, Float, Enum, DateTime, ForeignKey

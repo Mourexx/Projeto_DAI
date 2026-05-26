@@ -1,5 +1,3 @@
-# Package {P3} Operational — 4SRS SIBCP v3
-# Implements: {O3.3.d} passenger counting data
 import enum
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum
 from sqlalchemy.sql import func

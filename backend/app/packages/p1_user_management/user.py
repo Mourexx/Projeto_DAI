@@ -1,5 +1,3 @@
-# Package {P1} User Management — 4SRS SIBCP v3
-# Implements: {O1.1.d} user data
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship

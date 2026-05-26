@@ -1,6 +1,3 @@
-# Package {P2} Ticketing — 4SRS SIBCP v3
-# Implements: {O2.1.c} ticket purchase controller, {O2.2.c} ticket list controller,
-#             {O2.3.c} ticket validation controller, {O2.4.c} validation integration controller
 from datetime import datetime, timedelta, timezone
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException

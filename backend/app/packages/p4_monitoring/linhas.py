@@ -1,5 +1,3 @@
-# Package {P4} Monitoring — 4SRS SIBCP v3
-# Implements: {O4.4.c} line filter controller, {O4.4.d} line repository
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.db.database import get_db
