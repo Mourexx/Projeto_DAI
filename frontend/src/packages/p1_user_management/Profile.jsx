@@ -36,7 +36,6 @@ export default function Profile() {
     <div style={{ padding: 28, fontFamily: "'DM Sans', sans-serif", minHeight: '100vh', background: '#F4F6F9', overflowY: 'auto' }} className="animate-fadeIn">
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A1A1A', margin: '0 0 4px', letterSpacing: -0.3 }}>O Meu Perfil</h1>
-        <p style={{ fontSize: 13, color: '#9CA3AF', margin: 0 }}>UC1.3 · Consultar e editar informações da conta</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 20 }}>
